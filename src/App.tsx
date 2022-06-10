@@ -10,6 +10,7 @@ import {
   FavoriteBorder as FavoriteIconOutlined,
   VerifiedUser as UserIcon,
   CommentRounded as CommentIconOutlined, 
+  MoreVert as MoreVertIcon 
 } from '@mui/icons-material';
 
 function App() {
@@ -39,6 +40,11 @@ function App() {
           }
           title={postsQuery?.postsWithRelay.edges[index].node?.creator?.name ?? 'Anonymous'}
           subheader={postsQuery?.postsWithRelay.edges[index].node?.createdAt}
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          }
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
