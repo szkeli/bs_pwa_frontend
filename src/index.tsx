@@ -4,14 +4,34 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import '@ionic/react/css/core.css';
+import { relayStylePagination } from '@apollo/client/utilities';
+
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        postsWithRelay: relayStylePagination(),
+      }
+    }
+  }
+})
+
+const client = new ApolloClient({
+  uri: "https://api.szlikeyou.com/graphql",
+  cache,
+})
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <ApolloProvider client={client}>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </ApolloProvider>
 );
 
 // If you want your app to work offline and load faster, you can change
