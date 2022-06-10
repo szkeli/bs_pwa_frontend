@@ -7,7 +7,11 @@ import { Avatar, BottomNavigation, BottomNavigationAction, Box, List, ListItemAv
 import { Restore as RestoreIcon, Favorite as FavoriteIcon, VerifiedUser as UserIcon } from '@mui/icons-material';
 
 function App() {
-  const { loading, error, data, fetchMore } = usePostsQuery();
+  const { loading, error, data, fetchMore } = usePostsQuery({
+    variables: {
+      first: 100
+    }
+  });
   const [value, setValue] = useState(0);
 
   if (loading) return <div> Loading... </div>
@@ -35,7 +39,6 @@ function App() {
         </ListItemText>
       </ListItemButton>
     )
-    return <div>#{index} {postsQuery?.postsWithRelay.edges[index].node?.content}</div>
   }
 
   return (
@@ -49,7 +52,7 @@ function App() {
             fetchMore({
               variables: {
                 after: pageInfo?.endCursor,
-                first: 100,
+                first: 10,
               }
             })
           }}
