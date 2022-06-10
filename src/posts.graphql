@@ -12,6 +12,16 @@ query Posts($first: Int, $after: String) {
                 id
                 content
                 createdAt
+                creator {
+                    id
+                    name
+                    avatarImageUrl
+                }
+                anonymous {
+                    id
+                    subCampus
+                    watermark
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import '@ionic/react/css/core.css';
 import { relayStylePagination } from '@apollo/client/utilities';
+import { CssBaseline } from "@mui/material";
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -29,6 +30,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <ApolloProvider client={client}>
     <React.StrictMode>
+      <CssBaseline />
       <App />
     </React.StrictMode>
   </ApolloProvider>

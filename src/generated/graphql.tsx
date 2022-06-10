@@ -3529,7 +3529,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', postsWithRelay: { __typename?: 'PostsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'PostPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'PostEdge', node?: { __typename?: 'Post', id: string, content: string, createdAt: string } | null }> } };
+export type PostsQuery = { __typename?: 'Query', postsWithRelay: { __typename?: 'PostsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'PostPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'PostEdge', node?: { __typename?: 'Post', id: string, content: string, createdAt: string, creator?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null, anonymous?: { __typename?: 'Anonymous', id: string, subCampus?: string | null, watermark: string } | null } | null }> } };
 
 
 export const PostsDocument = gql`
@@ -3547,6 +3547,16 @@ export const PostsDocument = gql`
         id
         content
         createdAt
+        creator {
+          id
+          name
+          avatarImageUrl
+        }
+        anonymous {
+          id
+          subCampus
+          watermark
+        }
       }
     }
   }
