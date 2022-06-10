@@ -12,6 +12,7 @@ query Posts($first: Int, $after: String) {
                 id
                 content
                 createdAt
+                images
                 creator {
                     id
                     name
@@ -21,6 +22,14 @@ query Posts($first: Int, $after: String) {
                     id
                     subCampus
                     watermark
+                }
+                commentsWithRelay {
+                    totalCount
+                }
+                votesWithRelay {
+                    totalCount
+                    viewerCanUpvote
+                    viewerHasUpvoted
                 }
             }
         }
