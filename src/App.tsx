@@ -10,7 +10,8 @@ import {
   FavoriteBorder as FavoriteIconOutlined,
   VerifiedUser as UserIcon,
   CommentRounded as CommentIconOutlined, 
-  MoreVert as MoreVertIcon 
+  MoreVert as MoreVertIcon,
+  MessageRounded as MessagesIcon,
 } from '@mui/icons-material';
 
 function App() {
@@ -27,7 +28,6 @@ function App() {
 
   const itemContent = (index: number, postsQuery: PostsQuery | undefined) => {
     const images = postsQuery?.postsWithRelay.edges[index].node?.images as string[]
-    const hasImages = (images?.length ?? 0) !== 0
     const votesCount = postsQuery?.postsWithRelay.edges[index].node?.votesWithRelay.totalCount ?? 0
     const viewerHasUpvoted = postsQuery?.postsWithRelay.edges[index].node?.votesWithRelay.viewerHasUpvoted ?? false
     const commentsCount = postsQuery?.postsWithRelay.edges[index].node?.commentsWithRelay.totalCount ?? 0
@@ -106,6 +106,7 @@ function App() {
           }}>
           <BottomNavigationAction label="Recent" icon={<RestoreIcon />} />
           <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Messages" icon={<MessagesIcon/>} />
           <BottomNavigationAction label="Me" icon={<UserIcon />} />
         </BottomNavigation>
       </Paper>
