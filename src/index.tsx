@@ -8,6 +8,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import '@ionic/react/css/core.css';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { CssBaseline } from "@mui/material";
+import { BrowserRouter } from 'react-router-dom';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -27,11 +28,14 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <ApolloProvider client={client}>
     <React.StrictMode>
       <CssBaseline />
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </React.StrictMode>
   </ApolloProvider>
 );
