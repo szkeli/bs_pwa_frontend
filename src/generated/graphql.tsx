@@ -3771,7 +3771,7 @@ export type UniversitiesQueryVariables = Exact<{
 }>;
 
 
-export type UniversitiesQuery = { __typename?: 'Query', universities: { __typename?: 'UniversitiesConnection', totalCount: number, pageInfo: { __typename?: 'UniversityPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'UniversityEdge', node?: { __typename?: 'University', id: string, name: string, createdAt: string, logoUrl: string } | null }> } };
+export type UniversitiesQuery = { __typename?: 'Query', universities: { __typename?: 'UniversitiesConnection', totalCount: number, pageInfo: { __typename?: 'UniversityPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'UniversityEdge', node?: { __typename?: 'University', id: string, name: string, createdAt: string, logoUrl: string, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number }, institutes: { __typename?: 'InstitutesConnection', totalCount: number } } | null }> } };
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -3866,6 +3866,12 @@ export const UniversitiesDocument = gql`
         name
         createdAt
         logoUrl
+        subcampuses {
+          totalCount
+        }
+        institutes {
+          totalCount
+        }
       }
     }
   }

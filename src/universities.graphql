@@ -13,6 +13,12 @@ query Universities($first: Int, $after: String) {
         name
         createdAt
         logoUrl
+        subcampuses {
+          totalCount
+        }
+        institutes {
+          totalCount
+        }
       }
     }
   }

@@ -15,6 +15,8 @@ export default () => {
 
     const itemContent = (index: number, universitiesQuery: UniversitiesQuery | undefined) => {
         const university = universitiesQuery?.universities.edges[index].node
+        const subcampusesCount = university?.subcampuses.totalCount ?? 0
+        const institutesCount = university?.institutes.totalCount ?? 0
 
         return (
             <>
@@ -23,7 +25,8 @@ export default () => {
                         <Avatar alt='avatar' src={university?.logoUrl ?? ''} />
                     </ListItemAvatar>
                     <ListItemText
-                        primary={university?.name} />
+                        primary={university?.name} 
+                        secondary={`${institutesCount}个学院,${subcampusesCount}个校区`}/>
                 </ListItem>
                 <Divider variant="inset" />
             </>
@@ -33,7 +36,7 @@ export default () => {
     return (
         <Paper sx={{ flexGrow: 1, height: '100%' }}>
             <Virtuoso
-                style={{ height: 'calc(100vh - 56px', flexGrow: 1 }}
+                style={{ height: 'calc(100vh - 56px)', flexGrow: 1 }}
                 totalCount={data?.universities.edges.length ?? 0}
                 itemContent={(index) => itemContent(index, data)}
                 endReached={() => {
