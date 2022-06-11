@@ -1,8 +1,14 @@
 import {
     NetworkCell as NetworkIcon,
     NetworkLocked as NetworkItemIcon,
+    AdminPanelSettings as AdminPanelSettingsIcon,
+    ExpandLess as ExpandLessIcon,
+    ExpandMore as ExpandMoreIcon,
+    StarBorder as StarBorderIcon,
+    Report as ReportIcon,
+    AutoFixHighRounded as AuthenIcon
 } from "@mui/icons-material"
-import { Avatar, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material"
+import { Avatar, Collapse, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import { useEffect, useState } from "react"
 
 const networks = [
@@ -23,6 +29,13 @@ export default () => {
         
         return v ?? networks[0].url
     });
+
+    const [openAdminPanel, setOpenAdminPanel] = useState(false);
+
+    const handleClickAdminPanel = () => {
+        setOpenAdminPanel(!openAdminPanel);
+    };
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -47,6 +60,29 @@ export default () => {
                     </ListItemAvatar>
                     <ListItemText primary="设置网络接入点" secondary={selectedValue} />
                 </ListItemButton>
+                <ListItemButton onClick={handleClickAdminPanel}>
+                    <ListItemIcon>
+                        <AdminPanelSettingsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="管理员操作" />
+                    {openAdminPanel ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </ListItemButton>
+                <Collapse in={openAdminPanel} timeout='auto' unmountOnExit>
+                    <List component='div' disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <AuthenIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="所有待审核的认证" />
+                        </ListItemButton>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <ReportIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="所有举报信息" />
+                        </ListItemButton>
+                    </List>
+                </Collapse>
             </List>
             <SelectNetworkDialog
                 selectedValue={selectedValue}
