@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material"
 import { Avatar, Collapse, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const networks = [
     {
@@ -23,6 +24,7 @@ const networks = [
 ]
 
 export default () => {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(() => {
         const v = localStorage.getItem('network');
@@ -59,6 +61,9 @@ export default () => {
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary="设置网络接入点" secondary={selectedValue} />
+                </ListItemButton>
+                <ListItemButton onClick={ () => navigate('/universities', {replace: true})}>
+                    <ListItemText primary="所有大学" />
                 </ListItemButton>
                 <ListItemButton onClick={handleClickAdminPanel}>
                     <ListItemIcon>

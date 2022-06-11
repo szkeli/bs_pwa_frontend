@@ -1,0 +1,18 @@
+query Universities($first: Int, $after: String) {
+  universities(first: $first, after: $after) {
+    totalCount
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        createdAt
+      }
+    }
+  }
+}

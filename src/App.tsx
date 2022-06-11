@@ -11,6 +11,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './Home';
 import Me from './Me';
 import Users from './Users';
+import Universities from './Universities';
 
 function App() {
   const [value, setValue] = useState(0);
@@ -29,6 +30,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/users" element={<Users />} />
+      </Routes>
+      <Routes>
+        <Route path='/universities' element={<Universities />} />
       </Routes>
       <Paper sx={{ position: 'absolute', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
