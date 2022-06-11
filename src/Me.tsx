@@ -3,23 +3,26 @@ import {
     NetworkLocked as NetworkItemIcon,
 } from "@mui/icons-material"
 import { Avatar, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const networks = [
     {
-        url: 'api.szlikeyou.com',
+        url: 'https://api.szlikeyou.com/graphql',
         tip: '主网',
     },
     {
-        url: 'dev.szlikeyou.com',
+        url: 'https://dev.szlikeyou.com/graphql',
         tip: '测试网'
     }
 ]
 
 export default () => {
     const [open, setOpen] = useState(false);
-    const [selectedValue, setSelectedValue] = useState(networks[0].url);
-
+    const [selectedValue, setSelectedValue] = useState(() => {
+        const v = localStorage.getItem('network');
+        
+        return v ?? networks[0].url
+    });
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -28,6 +31,10 @@ export default () => {
         setOpen(false);
         setSelectedValue(value);
     }
+
+    useEffect(() => {
+        window.localStorage.setItem("network", selectedValue)
+    }, [selectedValue])
 
     return (
         <>
@@ -38,7 +45,7 @@ export default () => {
                             <NetworkIcon />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="设置网络接入点" secondary="api.szlikeyou.com" />
+                    <ListItemText primary="设置网络接入点" secondary={selectedValue} />
                 </ListItemButton>
             </List>
             <SelectNetworkDialog
@@ -66,6 +73,7 @@ function SelectNetworkDialog(props: SelectNetworkDialogProps) {
 
     const handleListItemClick = (value: string) => {
         onClose(value);
+        window.location.reload()
     };
 
     return (

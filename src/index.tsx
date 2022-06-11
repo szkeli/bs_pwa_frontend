@@ -30,8 +30,10 @@ const cache = new InMemoryCache({
   }
 })
 
+const networkUrl = window.localStorage.getItem('network');
+
 const client = new ApolloClient({
-  uri: "https://api.szlikeyou.com/graphql",
+  uri: networkUrl ?? "https://api.szlikeyou.com/graphql",
   cache,
 })
 
