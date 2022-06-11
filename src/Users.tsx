@@ -12,7 +12,6 @@ export default () => {
 
     if (loading) return <div> Loading... </div>
 
-    console.error({ data, error, loading })
     const pageInfo = data?.usersWithRelay.pageInfo
 
     const itemContent = (index: number, usersQuery: UsersQuery | undefined) => {
@@ -41,11 +40,10 @@ export default () => {
     return (
         <Paper sx={{ flexGrow: 1, height: '100%' }}>
             <Virtuoso
-                style={{ height: 'calc(100vh - 56px', flexGrow: 1 }}
+                style={{ height: 'calc(100vh - 56px)', flexGrow: 1 }}
                 totalCount={data?.usersWithRelay.edges.length ?? 0}
                 itemContent={(index) => itemContent(index, data)}
                 endReached={() => {
-                    console.error('dddddddddenddndsaoijdsu')
                     fetchMore({
                         variables: {
                             after: pageInfo?.endCursor,

@@ -12,6 +12,7 @@ query Universities($first: Int, $after: String) {
         id
         name
         createdAt
+        logoUrl
       }
     }
   }
