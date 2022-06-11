@@ -3,7 +3,6 @@ import './App.css';
 import { BottomNavigation, BottomNavigationAction, Box, Paper } from '@mui/material';
 import {
   Restore as RestoreIcon,
-  Favorite as FavoriteIcon,
   VerifiedUser as UserIcon,
   MessageRounded as MessagesIcon,
   SupervisedUserCircle as UsersIcon,
@@ -36,19 +35,18 @@ function App() {
           showLabels
           value={value}
           onChange={(_event, newValue) => {
-            if(newValue === 4) {
+            if(newValue === 3) {
               navigate('/me', {replace: true})
             } 
             if(newValue === 0) {
               navigate('/', {replace: true})
             }
-            if(newValue === 2) {
+            if(newValue === 1) {
               navigate('/users', {replace: true})
             }
             setValue(newValue);
           }}>
           <BottomNavigationAction label="Recent" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
           <BottomNavigationAction label="Users" icon={<UsersIcon />} />
           <BottomNavigationAction label="Messages" icon={<MessagesIcon/>} />
           <BottomNavigationAction label="Me" icon={<UserIcon />} />
