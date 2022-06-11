@@ -25,7 +25,7 @@ export default () => {
         const commentsCount = postsQuery?.postsWithRelay.edges[index].node?.commentsWithRelay.totalCount ?? 0
 
         return (
-            <Card>
+            <Card sx={{ marginTop: '10px', marginBottom: '10px', borderRadius: '0'}} elevation={0}>
                 <CardHeader
                     avatar={
                         <Avatar alt="avatar" src={postsQuery?.postsWithRelay.edges[index].node?.creator?.avatarImageUrl ?? ''} />
@@ -72,7 +72,7 @@ export default () => {
     }
 
     return (
-        <Paper sx={{ flexGrow: 1, height: '100%' }}>
+        <Paper sx={{backgroundColor: '#eee', flexGrow: 1, height: '100%' }}>
             <Virtuoso
                 style={{ height: 'calc(100vh - 56px)', flexGrow: 1 }}
                 totalCount={data?.postsWithRelay.edges.length ?? 0}
