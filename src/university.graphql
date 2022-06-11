@@ -1,7 +1,37 @@
-query University($id: String!) {
+query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String) {
   university(id: $id) {
     id
     name
     logoUrl
+    institutes(first: $institutesFirst, after: $institutesAfter) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+    subcampuses(first: $subcampusesFirst, after: $subcampusesAfter) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
   }
 }

@@ -3775,10 +3775,14 @@ export type UniversitiesQuery = { __typename?: 'Query', universities: { __typena
 
 export type UniversityQueryVariables = Exact<{
   id: Scalars['String'];
+  institutesFirst?: InputMaybe<Scalars['Int']>;
+  institutesAfter?: InputMaybe<Scalars['String']>;
+  subcampusesFirst?: InputMaybe<Scalars['Int']>;
+  subcampusesAfter?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string } };
+export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -3914,11 +3918,41 @@ export type UniversitiesQueryHookResult = ReturnType<typeof useUniversitiesQuery
 export type UniversitiesLazyQueryHookResult = ReturnType<typeof useUniversitiesLazyQuery>;
 export type UniversitiesQueryResult = Apollo.QueryResult<UniversitiesQuery, UniversitiesQueryVariables>;
 export const UniversityDocument = gql`
-    query University($id: String!) {
+    query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String) {
   university(id: $id) {
     id
     name
     logoUrl
+    institutes(first: $institutesFirst, after: $institutesAfter) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+    subcampuses(first: $subcampusesFirst, after: $subcampusesAfter) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
   }
 }
     `;
@@ -3936,6 +3970,10 @@ export const UniversityDocument = gql`
  * const { data, loading, error } = useUniversityQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      institutesFirst: // value for 'institutesFirst'
+ *      institutesAfter: // value for 'institutesAfter'
+ *      subcampusesFirst: // value for 'subcampusesFirst'
+ *      subcampusesAfter: // value for 'subcampusesAfter'
  *   },
  * });
  */
