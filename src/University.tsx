@@ -24,10 +24,10 @@ export default () => {
     if (loading) return <div>Loading...</div>
 
     return (
-        <>
+        <Box>
             <Header universityQuery={data} />
             <MTabs universityQuery={data} />
-        </>
+        </Box>
     )
 }
 
@@ -65,14 +65,14 @@ function MTabs(props: { universityQuery?: UniversityQuery }) {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
                 <Tabs value={value} onChange={handleChange}>
                     <Tab label={institutesLabel} {...a11yProps(0)} />
-                    <Tab label={subcampusesLabel} {...a11yProps(0)} />
+                    <Tab label={subcampusesLabel} {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
                 <InstitutesList universityQuery={props.universityQuery} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                ItemTwo
+                <SubCampusesList universityQuery={props.universityQuery} />
             </TabPanel>
         </Box>
 
@@ -83,13 +83,9 @@ function InstitutesList(props: { universityQuery?: UniversityQuery }) {
     const university = props.universityQuery?.university
     const institutes = university?.institutes
 
-    const itemContent = (index: number, institutesQuery?: InstitutesConnection) => {
-
-    }
-
     return (
         <Virtuoso
-            style={{ height: 'calc(100vh - 56px)', flexGrow: 1 }}
+            style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
             totalCount={institutes?.edges.length ?? 0}
             itemContent={(index) => {
                 return (
@@ -112,7 +108,31 @@ function InstitutesList(props: { universityQuery?: UniversityQuery }) {
 }
 
 function SubCampusesList(props: { universityQuery?: UniversityQuery }) {
-    return <></>
+    const university = props.universityQuery?.university
+    const subCampuses = university?.subcampuses
+
+    return (
+        <Virtuoso
+            style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
+            totalCount={subCampuses?.edges.length ?? 0}
+            itemContent={(index) => {
+                return (
+                    <ListItem button>
+                        <ListItemText primary={subCampuses?.edges[index].node?.name ?? ''} />
+                    </ListItem>
+                )
+            }}
+            endReached={index => {
+                // fetchMore({
+                //     variables: {
+                //         after: pageInfo?.endCursor,
+                //         first: 10,
+                //     }
+                // })
+            }}
+        >
+        </Virtuoso>
+    )
 }
 
 interface TabPanelProps {
