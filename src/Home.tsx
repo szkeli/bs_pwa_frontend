@@ -11,7 +11,7 @@ import { Virtuoso } from "react-virtuoso";
 export default () => {
     const { loading, error, data, fetchMore } = usePostsQuery({
         variables: {
-            first: 100
+            first: 10
         }
     });
     if (loading) return <div> Loading... </div>

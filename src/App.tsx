@@ -14,12 +14,11 @@ import Me from './Me';
 function App() {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-
+  
   return (
     <Box sx={{
       display: 'flex', 
       flexDirection: 'column',
-      backgroundColor: 'primary.dark',
     }}>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -33,10 +32,10 @@ function App() {
           value={value}
           onChange={(_event, newValue) => {
             if(newValue === 3) {
-              navigate('/me')
-            }
+              navigate('/me', {replace: true})
+            } 
             if(newValue === 0) {
-              navigate('/')
+              navigate('/', {replace: true})
             }
             setValue(newValue);
           }}>
