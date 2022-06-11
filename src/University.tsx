@@ -1,6 +1,7 @@
 import {
     Avatar, IconButton, ListItem,
     ListItemAvatar, ListItemText,
+    SpeedDial,
     Tab, Tabs,
     Typography
 } from "@mui/material";
@@ -8,7 +9,7 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { InstitutesConnection, University, UniversityQuery, useUniversityQuery } from "./generated/graphql";
-import { Edit as EditIcon } from '@mui/icons-material';
+import { Edit as EditIcon, Add as AddIcon } from '@mui/icons-material';
 import { Virtuoso } from "react-virtuoso";
 
 export default () => {
@@ -84,26 +85,32 @@ function InstitutesList(props: { universityQuery?: UniversityQuery }) {
     const institutes = university?.institutes
 
     return (
-        <Virtuoso
-            style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
-            totalCount={institutes?.edges.length ?? 0}
-            itemContent={(index) => {
-                return (
-                    <ListItem button>
-                        <ListItemText primary={institutes?.edges[index].node?.name ?? ''} />
-                    </ListItem>
-                )
-            }}
-            endReached={index => {
-                // fetchMore({
-                //     variables: {
-                //         after: pageInfo?.endCursor,
-                //         first: 10,
-                //     }
-                // })
-            }}
-        >
-        </Virtuoso>
+        <>
+            <SpeedDial
+                ariaLabel="SpeedDial"
+                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
+                icon={<AddIcon />} />
+            <Virtuoso
+                style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
+                totalCount={institutes?.edges.length ?? 0}
+                itemContent={(index) => {
+                    return (
+                        <ListItem button>
+                            <ListItemText primary={institutes?.edges[index].node?.name ?? ''} />
+                        </ListItem>
+                    )
+                }}
+                endReached={index => {
+                    // fetchMore({
+                    //     variables: {
+                    //         after: pageInfo?.endCursor,
+                    //         first: 10,
+                    //     }
+                    // })
+                }}
+            >
+            </Virtuoso>
+        </>
     )
 }
 
@@ -112,26 +119,33 @@ function SubCampusesList(props: { universityQuery?: UniversityQuery }) {
     const subCampuses = university?.subcampuses
 
     return (
-        <Virtuoso
-            style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
-            totalCount={subCampuses?.edges.length ?? 0}
-            itemContent={(index) => {
-                return (
-                    <ListItem button>
-                        <ListItemText primary={subCampuses?.edges[index].node?.name ?? ''} />
-                    </ListItem>
-                )
-            }}
-            endReached={index => {
-                // fetchMore({
-                //     variables: {
-                //         after: pageInfo?.endCursor,
-                //         first: 10,
-                //     }
-                // })
-            }}
-        >
-        </Virtuoso>
+        <>
+            <SpeedDial
+                ariaLabel="SpeedDial"
+                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
+                icon={<AddIcon />} />
+            <Virtuoso
+                style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
+                totalCount={subCampuses?.edges.length ?? 0}
+                itemContent={(index) => {
+                    return (
+                        <ListItem button>
+                            <ListItemText primary={subCampuses?.edges[index].node?.name ?? ''} />
+                        </ListItem>
+                    )
+                }}
+                endReached={index => {
+                    // fetchMore({
+                    //     variables: {
+                    //         after: pageInfo?.endCursor,
+                    //         first: 10,
+                    //     }
+                    // })
+                }}
+            >
+            </Virtuoso>
+        </>
+
     )
 }
 
