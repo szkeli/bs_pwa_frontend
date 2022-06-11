@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://api.szlikeyou.com/graphql"
+schema: "https://dev.szlikeyou.com/graphql"
 documents: "src/**/*.graphql"
 generates:
   src/generated/graphql.tsx:

@@ -93,8 +93,6 @@ export type AdminPrivilegesArgs = {
 
 export type AdminAndUserUnion = Admin | User;
 
-export type AdminAndUserWithPrivatePropsUnion = Admin | UserWithPrivateProps;
-
 export type AdminEdge = {
   __typename?: 'AdminEdge';
   cursor?: Maybe<Scalars['String']>;
@@ -153,24 +151,24 @@ export type AuthenableRolesArgs = {
 export type AuthenticationInfo = {
   /** 用户头像 */
   avatarImageUrl: Scalars['String'];
-  /** 学院 */
-  college: Scalars['String'];
   /** 性别 */
   gender: Gender;
   /** 年级 */
   grade: Scalars['String'];
   /** 有效信息图片(e.g. 校园卡照片)的链接 */
   images: Array<Scalars['String']>;
+  /** 学院的id的数组 */
+  institutes: Array<Scalars['String']>;
   /** 用户昵称 */
   name: Scalars['String'];
   /** 用户申请的角色的id的数组 */
   roles?: InputMaybe<Array<Scalars['String']>>;
-  /** 学校 */
-  school: Scalars['String'];
   /** 学号 */
   studentId: Scalars['Float'];
-  /** 校区 */
-  subCampus: Scalars['String'];
+  /** 校区的id的数组 */
+  subCampuses: Array<Scalars['String']>;
+  /** 大学的id的数组 */
+  universities: Array<Scalars['String']>;
 };
 
 export type AvatarImageUploadCredentialInfo = {
@@ -477,7 +475,7 @@ export type DeletePageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
-export type DeletedUnion = Comment | Post | Subject | UserAuthenInfo;
+export type DeletedUnion = Comment | Post | Subject | University | UserAuthenInfo;
 
 export type DeletesConnection = {
   __typename?: 'DeletesConnection';
@@ -642,6 +640,37 @@ export type ImagesUploadCredentialInfo = {
   tmpSecretKey: Scalars['String'];
 };
 
+export type Institute = {
+  __typename?: 'Institute';
+  createdAt: Scalars['String'];
+  id: Scalars['String'];
+  logoUrl: Scalars['String'];
+  name: Scalars['String'];
+  /** 当前学院所在的大学 */
+  university: University;
+};
+
+export type InstituteEdge = {
+  __typename?: 'InstituteEdge';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<Institute>;
+};
+
+export type InstitutePageInfo = {
+  __typename?: 'InstitutePageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
+export type InstitutesConnection = {
+  __typename?: 'InstitutesConnection';
+  edges: Array<InstituteEdge>;
+  pageInfo: InstitutePageInfo;
+  totalCount: Scalars['Int'];
+};
+
 export type KeywordsExtractionResult = {
   __typename?: 'KeywordsExtractionResult';
   score: Scalars['Float'];
@@ -770,7 +799,10 @@ export type LoginResult = Node & Person & {
   authenInfo?: Maybe<UserAuthenInfo>;
   /** 用户头像链接 */
   avatarImageUrl?: Maybe<Scalars['String']>;
-  /** 学院 */
+  /**
+   * 学院
+   * @deprecated feature/multiuniversity 后废弃，请使用 institutes 代替
+   */
   college?: Maybe<Scalars['String']>;
   /** 当前用户发布的评论 */
   comments: CommentsConnection;
@@ -788,8 +820,12 @@ export type LoginResult = Node & Person & {
   /** 年级 */
   grade?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  /** 当前用户所属的学院 */
+  institutes?: Maybe<InstitutesConnection>;
   /** 用户上一次调用login接口获取token的系统时间 */
   lastLoginedAt: Scalars['String'];
+  /** 获取当前用户上课通知的设置 */
+  lessonNotificationSettings: LessonNotificationSettings;
   /** 当前用户的所有课程 */
   lessons: LessonsConnection;
   /** 用户昵称 */
@@ -799,6 +835,8 @@ export type LoginResult = Node & Person & {
   /** 当前用户创建的所有帖子 */
   posts: PostsConnection;
   postsWithRelay: PostsConnectionWithRelay;
+  /** 当前用户的隐私设定 */
+  privateSettings?: Maybe<PrivateSettings>;
   /** 当前用户具有的权限 */
   privileges: PrivilegesConnection;
   /** 回复的通知 */
@@ -807,18 +845,28 @@ export type LoginResult = Node & Person & {
   reports: ReportsConnection;
   /** 当前用户的所有角色 */
   roles: RolesConnection;
-  /** 学校 */
+  /**
+   * 学校
+   * @deprecated feature/multiuniversity 后废弃，请使用 university 代替
+   */
   school?: Maybe<Scalars['String']>;
   /** 学号 */
   studentId?: Maybe<Scalars['Int']>;
-  /** 校区 */
+  /**
+   * 校区
+   * @deprecated feature/multiuniversity 后废弃，请使用 subCampuses 代替
+   */
   subCampus?: Maybe<Scalars['String']>;
+  /** 当前用户所属的校区 */
+  subCampuses?: Maybe<SubCampusesConnection>;
   /** 当前用户创建的所有主题 */
   subjects: SubjectsConnection;
   /** token */
   token: Scalars['String'];
   /** 微信unionId,注册时传入微信code自动通过微信提供的接口获取获取 */
   unionId: Scalars['String'];
+  /** 当前用户所在的大学 */
+  university?: Maybe<University>;
   /** 用户信息的更新时间 */
   updatedAt: Scalars['String'];
   /** 点赞的通知 */
@@ -854,6 +902,15 @@ export type LoginResultConversationsArgs = {
 
 
 export type LoginResultDeadlinesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type LoginResultInstitutesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -916,6 +973,15 @@ export type LoginResultReportsArgs = {
 
 
 export type LoginResultRolesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type LoginResultSubCampusesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1026,6 +1092,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** 管理员接口：认为举报有效 */
   acceptReport: Scalars['Boolean'];
+  /** 测试接口，将当前所有帖子添加到某个学校 */
+  addAllPostToUniversity: Scalars['Boolean'];
+  /** 测试接口，将当前所有用户添加到某个学校 */
+  addAllUserToUniversity: Scalars['Boolean'];
   /** 拉黑一个用户 */
   addBlockOnUser: Block;
   /** 添加一条评论到评论 */
@@ -1078,22 +1148,29 @@ export type Mutation = {
   closeConversation: Conversation;
   /** 创建一个会话 */
   createConversation: Conversation;
+  createInstitute: Institute;
   /** 创建一个帖子 */
   createPost: Post;
   /** 创建角色 */
   createRole: Role;
+  createSubCampus: SubCampus;
   /** 创建一个主题 */
   createSubject: Subject;
+  createUniversity: University;
   /** 管理员或用户删除一个评论 */
   deleteComment: Delete;
+  deleteInstitute: Scalars['Boolean'];
   /** 从当前用户中删除一个课程 */
   deleteLesson: Scalars['Boolean'];
   /** 从当前用户中删除某节课 */
   deleteLessonItem: Scalars['Boolean'];
   /** 管理员或用户删除一个帖子 */
   deletePost: Delete;
+  deleteSubCampus: Scalars['Boolean'];
   /** 以id删除一个主题 */
   deleteSubject: Delete;
+  /** 标记删除一个 University */
+  deleteUniversity: Scalars['Boolean'];
   /** 管理员接口：认为举报无效 */
   discardReport: Scalars['Boolean'];
   /** 删除数据库所有数据，包括schema */
@@ -1142,8 +1219,13 @@ export type Mutation = {
   updateLessonMetaData: LessonMetaData;
   /** 更新用户上课通知设置 */
   updateLessonNotificationSettings: LessonNotificationSettings;
+  /** 更改密码 */
+  updatePassword: UpdatePasswordResultUnion;
+  /** 更新当前用户的隐私信息 */
+  updatePrivateSettings: PrivateSettings;
   /** 以id更新一个主题 */
   updateSubject: Subject;
+  updateUniversity: University;
   /** 更新用户画像 */
   updateUser: User;
 };
@@ -1152,6 +1234,16 @@ export type Mutation = {
 export type MutationAcceptReportArgs = {
   content: Scalars['String'];
   reportId: Scalars['String'];
+};
+
+
+export type MutationAddAllPostToUniversityArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationAddAllUserToUniversityArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -1341,11 +1433,19 @@ export type MutationCreateConversationArgs = {
 };
 
 
+export type MutationCreateInstituteArgs = {
+  id: Scalars['String'];
+  logoUrl: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
 export type MutationCreatePostArgs = {
   content: Scalars['String'];
   images?: InputMaybe<Array<Scalars['String']>>;
   isAnonymous?: InputMaybe<Scalars['Boolean']>;
   subjectId?: InputMaybe<Scalars['String']>;
+  universityId: Scalars['String'];
 };
 
 
@@ -1354,16 +1454,34 @@ export type MutationCreateRoleArgs = {
 };
 
 
+export type MutationCreateSubCampusArgs = {
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
 export type MutationCreateSubjectArgs = {
   avatarImageUrl: Scalars['String'];
   backgroundImageUrl: Scalars['String'];
   description: Scalars['String'];
   title: Scalars['String'];
+  universityId: Scalars['String'];
+};
+
+
+export type MutationCreateUniversityArgs = {
+  logoUrl: Scalars['String'];
+  name: Scalars['String'];
 };
 
 
 export type MutationDeleteCommentArgs = {
   commentId: Scalars['String'];
+};
+
+
+export type MutationDeleteInstituteArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -1382,7 +1500,18 @@ export type MutationDeletePostArgs = {
 };
 
 
+export type MutationDeleteSubCampusArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationDeleteSubjectArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteUniversityArgs = {
+  description?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
@@ -1505,12 +1634,33 @@ export type MutationUpdateLessonNotificationSettingsArgs = {
 };
 
 
+export type MutationUpdatePasswordArgs = {
+  sign: Scalars['String'];
+};
+
+
+export type MutationUpdatePrivateSettingsArgs = {
+  isGenderPrivate?: InputMaybe<Scalars['Boolean']>;
+  isGradePrivate?: InputMaybe<Scalars['Boolean']>;
+  isInstitutePrivate?: InputMaybe<Scalars['Boolean']>;
+  isSubCampusPrivate?: InputMaybe<Scalars['Boolean']>;
+  isUniversityPrivate?: InputMaybe<Scalars['Boolean']>;
+};
+
+
 export type MutationUpdateSubjectArgs = {
   avatarImageUrl?: InputMaybe<Scalars['String']>;
   backgroundImageUrl?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   title?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateUniversityArgs = {
+  id: Scalars['String'];
+  logoUrl?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1622,13 +1772,21 @@ export type Person = {
   credential?: Maybe<ICredential>;
   /** 当前用户的deadlines */
   deadlines: DeadlinesConnection;
+  /** 当前用户的性别 */
+  gender?: Maybe<Gender>;
   id: Scalars['String'];
+  /** 当前用户所属的学院 */
+  institutes?: Maybe<InstitutesConnection>;
+  /** 获取当前用户上课通知的设置 */
+  lessonNotificationSettings: LessonNotificationSettings;
   /** 当前用户的所有课程 */
   lessons: LessonsConnection;
   name: Scalars['String'];
   /** 当前用户创建的所有帖子 */
   posts: PostsConnection;
   postsWithRelay: PostsConnectionWithRelay;
+  /** 当前用户的隐私设定 */
+  privateSettings?: Maybe<PrivateSettings>;
   /** 当前用户具有的权限 */
   privileges: PrivilegesConnection;
   /** 回复的通知 */
@@ -1637,8 +1795,12 @@ export type Person = {
   reports: ReportsConnection;
   /** 当前用户的所有角色 */
   roles: RolesConnection;
+  /** 当前用户所属的校区 */
+  subCampuses?: Maybe<SubCampusesConnection>;
   /** 当前用户创建的所有主题 */
   subjects: SubjectsConnection;
+  /** 当前用户所在的大学 */
+  university?: Maybe<University>;
   /** 点赞的通知 */
   upvoteNotifications?: Maybe<VoteWithUnreadCountsConnection>;
   userId: Scalars['String'];
@@ -1671,6 +1833,15 @@ export type PersonConversationsArgs = {
 
 
 export type PersonDeadlinesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type PersonInstitutesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1733,6 +1904,15 @@ export type PersonReportsArgs = {
 
 
 export type PersonRolesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type PersonSubCampusesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1834,6 +2014,8 @@ export type Post = {
   subject?: Maybe<Subject>;
   /** 按热度返回评论 */
   trendingComments: CommentsConnection;
+  /** 该帖子所在的大学 */
+  university?: Maybe<University>;
   /** 帖子的点赞 */
   votes: VotesConnection;
   /** 帖子的点赞 */
@@ -1935,6 +2117,20 @@ export type PostsConnectionWithRelay = {
   totalCount: Scalars['Int'];
 };
 
+export type PrivateSettings = {
+  __typename?: 'PrivateSettings';
+  /** 性别是否公开 */
+  isGenderPrivate?: Maybe<Scalars['Boolean']>;
+  /** 年级是否公开 */
+  isGradePrivate?: Maybe<Scalars['Boolean']>;
+  /** 学院是否公开 */
+  isInstitutePrivate?: Maybe<Scalars['Boolean']>;
+  /** 校区是否公开 */
+  isSubCampusPrivate?: Maybe<Scalars['Boolean']>;
+  /** 学校是否公开 */
+  isUniversityPrivate?: Maybe<Scalars['Boolean']>;
+};
+
 export type Privilege = {
   __typename?: 'Privilege';
   createdAt: Scalars['String'];
@@ -2024,6 +2220,8 @@ export type Query = {
   getWXSubscriptionInfo: WxSubscriptionInfo;
   hashtag: Hashtag;
   hashtags: HashtagsConnection;
+  institute: Institute;
+  institutes: InstitutesConnection;
   keywordsExtraction: Array<KeywordsExtractionResult>;
   /** 以 id 获取指定课程 */
   lesson: Lesson;
@@ -2076,6 +2274,8 @@ export type Query = {
   sendUniformMessage: Scalars['String'];
   /** 分析一段文本的情感 */
   sentimentAnalysis: SentimentAnalysisResult;
+  subcampus: SubCampus;
+  subcampuses: SubCampusesConnection;
   /** 以id获取主题 */
   subject: Subject;
   /**
@@ -2095,6 +2295,8 @@ export type Query = {
   trendingPosts: PostsConnection;
   /** 按热度获取所有帖子 */
   trendingPostsWithRelay: PostsConnectionWithRelay;
+  universities: UniversitiesConnection;
+  university: University;
   /** 以id获取用户 */
   user: User;
   /** 待通过审核的用户信息 */
@@ -2106,12 +2308,16 @@ export type Query = {
   userReplyNotifications?: Maybe<NotificationsConnection>;
   /** 测试接口，获取某用户所有的点赞通知，非当前用户获取到null */
   userUpvoteNotifications?: Maybe<VoteWithUnreadCountsConnection>;
-  /** 获取所有用户 */
+  /**
+   * 获取所有用户
+   * @deprecated 使用 usersWithRelay
+   */
   users: UsersConnection;
+  usersWithRelay: UsersConnectionWithRelay;
   /** 某段时间内的所有点赞 */
   votesCreatedWithin: VotesConnection;
   /** 当前id对应的的用户画像 */
-  whoAmI: AdminAndUserWithPrivatePropsUnion;
+  whoAmI: WhoAmIUnion;
 };
 
 
@@ -2320,6 +2526,20 @@ export type QueryHashtagsArgs = {
 };
 
 
+export type QueryInstituteArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryInstitutesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
 export type QueryKeywordsExtractionArgs = {
   content: Scalars['String'];
   keywordNum?: InputMaybe<Scalars['Int']>;
@@ -2408,6 +2628,7 @@ export type QueryPostsWithRelayArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Order_By>;
+  universityId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2488,6 +2709,20 @@ export type QuerySentimentAnalysisArgs = {
 };
 
 
+export type QuerySubcampusArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QuerySubcampusesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
 export type QuerySubjectArgs = {
   id: Scalars['String'];
 };
@@ -2515,6 +2750,7 @@ export type QuerySubjectsWithRelayArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Order_By>;
+  universityId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2535,6 +2771,20 @@ export type QueryTrendingPostsWithRelayArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type QueryUniversitiesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type QueryUniversityArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -2598,6 +2848,16 @@ export type QueryUserUpvoteNotificationsArgs = {
 export type QueryUsersArgs = {
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryUsersWithRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+  universityId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2704,12 +2964,21 @@ export type RolesConnection = {
 
 export enum Searchtype {
   Comment = 'COMMENT',
+  /** 学院 */
+  Institute = 'INSTITUTE',
+  /** 评论 */
   Post = 'POST',
+  /** 校区 */
+  Subcampus = 'SUBCAMPUS',
+  /** 主题 */
   Subject = 'SUBJECT',
+  /** 大学 */
+  University = 'UNIVERSITY',
+  /** 用户 */
   User = 'USER'
 }
 
-export type SearchResultItem = Comment | Post | Subject | User;
+export type SearchResultItem = Comment | Institute | Post | SubCampus | Subject | University | User;
 
 export type SearchResultItemConnection = {
   __typename?: 'SearchResultItemConnection';
@@ -2754,6 +3023,35 @@ export type SetDbSchema = {
   wrappers_?: Maybe<Scalars['String']>;
 };
 
+export type SubCampus = {
+  __typename?: 'SubCampus';
+  createdAt: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  university: University;
+};
+
+export type SubCampusEdge = {
+  __typename?: 'SubCampusEdge';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<SubCampus>;
+};
+
+export type SubCampusPageInfo = {
+  __typename?: 'SubCampusPageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
+export type SubCampusesConnection = {
+  __typename?: 'SubCampusesConnection';
+  edges: Array<SubCampusEdge>;
+  pageInfo: SubCampusPageInfo;
+  totalCount: Scalars['Int'];
+};
+
 export type Subject = {
   __typename?: 'Subject';
   avatarImageUrl: Scalars['String'];
@@ -2770,6 +3068,8 @@ export type Subject = {
   posts: PostsConnection;
   postsWithRelay: PostsConnectionWithRelay;
   title: Scalars['String'];
+  /** 具有该 Subject 的所有大学 */
+  universities: UniversitiesConnection;
 };
 
 
@@ -2780,6 +3080,15 @@ export type SubjectPostsArgs = {
 
 
 export type SubjectPostsWithRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type SubjectUniversitiesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2864,6 +3173,95 @@ export type TextClassificationResult = {
   thirdClassProbability?: Maybe<Scalars['Float']>;
 };
 
+export type UniversitiesConnection = {
+  __typename?: 'UniversitiesConnection';
+  edges: Array<UniversityEdge>;
+  pageInfo: UniversityPageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type University = {
+  __typename?: 'University';
+  createdAt: Scalars['String'];
+  /** 大学的唯一id */
+  id: Scalars['String'];
+  /** 该大学的所有学院 */
+  institutes: InstitutesConnection;
+  /** 该大学的 logo */
+  logoUrl: Scalars['String'];
+  /** 该大学的名字 */
+  name: Scalars['String'];
+  /** 该大学拥有的所有 Post */
+  posts: PostsConnectionWithRelay;
+  /** 该大学的所有校区 */
+  subcampuses: SubCampusesConnection;
+  /** 该大学拥有的所有 Subject */
+  subjects: SubjectsConnection;
+  /** 该大学内的所有 User */
+  users: UsersConnectionWithRelay;
+};
+
+
+export type UniversityInstitutesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type UniversityPostsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type UniversitySubcampusesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type UniversitySubjectsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type UniversityUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+export type UniversityEdge = {
+  __typename?: 'UniversityEdge';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<University>;
+};
+
+export type UniversityPageInfo = {
+  __typename?: 'UniversityPageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
+export type UpdatePasswordResultUnion = Admin | User;
+
 export type UpvoteNotification = Notifiable & {
   __typename?: 'UpvoteNotification';
   /** 通知涉及的对象：用户User A 对帖子 Post或评论Comment B 发布了评论 Comment C，则C是about；用户User A点赞帖子Post 或评论Comment B则B是about */
@@ -2888,7 +3286,10 @@ export type User = Node & Person & {
   authenInfo?: Maybe<UserAuthenInfo>;
   /** 用户头像链接 */
   avatarImageUrl?: Maybe<Scalars['String']>;
-  /** 学院 */
+  /**
+   * 学院
+   * @deprecated feature/multiuniversity 后废弃，请使用 institutes 代替
+   */
   college?: Maybe<Scalars['String']>;
   /** 当前用户发布的评论 */
   comments: CommentsConnection;
@@ -2907,8 +3308,12 @@ export type User = Node & Person & {
   grade?: Maybe<Scalars['String']>;
   /** id 自动生成 */
   id: Scalars['String'];
+  /** 当前用户所属的学院 */
+  institutes?: Maybe<InstitutesConnection>;
   /** 用户上一次调用login接口获取token的系统时间 */
   lastLoginedAt: Scalars['String'];
+  /** 获取当前用户上课通知的设置 */
+  lessonNotificationSettings: LessonNotificationSettings;
   /** 当前用户的所有课程 */
   lessons: LessonsConnection;
   /** 用户昵称 */
@@ -2918,6 +3323,8 @@ export type User = Node & Person & {
   /** 当前用户创建的所有帖子 */
   posts: PostsConnection;
   postsWithRelay: PostsConnectionWithRelay;
+  /** 当前用户的隐私设定 */
+  privateSettings?: Maybe<PrivateSettings>;
   /** 当前用户具有的权限 */
   privileges: PrivilegesConnection;
   /** 回复的通知 */
@@ -2926,16 +3333,26 @@ export type User = Node & Person & {
   reports: ReportsConnection;
   /** 当前用户的所有角色 */
   roles: RolesConnection;
-  /** 学校 */
+  /**
+   * 学校
+   * @deprecated feature/multiuniversity 后废弃，请使用 university 代替
+   */
   school?: Maybe<Scalars['String']>;
   /** 学号 */
   studentId?: Maybe<Scalars['Int']>;
-  /** 校区 */
+  /**
+   * 校区
+   * @deprecated feature/multiuniversity 后废弃，请使用 subCampuses 代替
+   */
   subCampus?: Maybe<Scalars['String']>;
+  /** 当前用户所属的校区 */
+  subCampuses?: Maybe<SubCampusesConnection>;
   /** 当前用户创建的所有主题 */
   subjects: SubjectsConnection;
   /** 微信unionId,注册时传入微信code自动通过微信提供的接口获取获取 */
   unionId: Scalars['String'];
+  /** 当前用户所在的大学 */
+  university?: Maybe<University>;
   /** 用户信息的更新时间 */
   updatedAt: Scalars['String'];
   /** 点赞的通知 */
@@ -2971,6 +3388,15 @@ export type UserConversationsArgs = {
 
 
 export type UserDeadlinesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type UserInstitutesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -3041,6 +3467,15 @@ export type UserRolesArgs = {
 };
 
 
+export type UserSubCampusesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
 export type UserSubjectsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -3075,8 +3510,11 @@ export type UserAuthenInfo = Authenable & {
   __typename?: 'UserAuthenInfo';
   /** 头像 */
   avatarImageUrl: Scalars['String'];
-  /** 学院 */
-  college: Scalars['String'];
+  /**
+   * 学院
+   * @deprecated feature/multiuniversity 中被弃用，请使用 institutes 代替
+   */
+  college?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
   /** 审核信息的删除者 */
   delete?: Maybe<Delete>;
@@ -3085,16 +3523,22 @@ export type UserAuthenInfo = Authenable & {
   /** 年级 */
   grade: Scalars['String'];
   id: Scalars['String'];
-  /** 有效信息图片(e.g. 校园卡照片)的链接 */
+  /** bug: 图片乱序，有效信息图片(e.g. 校园卡照片)的链接 */
   images?: Maybe<Array<Scalars['String']>>;
   /** 用户申请的角色 */
   roles: RolesConnection;
-  /** 学校 */
-  school: Scalars['String'];
+  /**
+   * 学校
+   * @deprecated feature/multiuniversity 中被弃用，请使用 universities 代替
+   */
+  school?: Maybe<Scalars['String']>;
   /** 学号 */
   studentId: Scalars['Float'];
-  /** 校区 */
-  subCampus: Scalars['String'];
+  /**
+   * 校区
+   * @deprecated feature/multiuniversity 中被弃用，请使用 subCampuses 代替
+   */
+  subCampus?: Maybe<Scalars['String']>;
   /** 提交信息的用户 */
   to: User;
 };
@@ -3141,218 +3585,6 @@ export type UserPageInfo = {
   hasNextPage: Scalars['Boolean'];
   hasPreviousPage: Scalars['Boolean'];
   startCursor?: Maybe<Scalars['String']>;
-};
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivateProps = Node & Person & {
-  __typename?: 'UserWithPrivateProps';
-  /** 当前用户提交的认证信息 */
-  authenInfo?: Maybe<UserAuthenInfo>;
-  /** 用户头像链接 */
-  avatarImageUrl?: Maybe<Scalars['String']>;
-  /** 学院 */
-  college?: Maybe<Scalars['String']>;
-  /** 当前用户发布的评论 */
-  comments: CommentsConnection;
-  commentsWithRelay: CommentsConnectionWithRelay;
-  /** 当前用户创建的所有会话 */
-  conversations: ConversationsConnection;
-  /** 用户创建时间 */
-  createdAt: Scalars['String'];
-  /** 当前用户的认证凭证，未认证用户为null */
-  credential?: Maybe<ICredential>;
-  /** 当前用户的deadlines */
-  deadlines: DeadlinesConnection;
-  /** 用户性别 */
-  gender?: Maybe<Gender>;
-  /** 年级 */
-  grade?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  /** 学院属性是否私有 */
-  isCollegePrivate?: Maybe<Scalars['Boolean']>;
-  /** 性别属性是否私有 */
-  isGenderPrivate?: Maybe<Scalars['Boolean']>;
-  /** 年级属性是否私有 */
-  isGradePrivate?: Maybe<Scalars['Boolean']>;
-  /** 学校属性是否私有 */
-  isSchoolPrivate?: Maybe<Scalars['Boolean']>;
-  /** 校区属性是否私有 */
-  isSubCampusPrivate?: Maybe<Scalars['Boolean']>;
-  /** 用户上一次调用login接口获取token的系统时间 */
-  lastLoginedAt: Scalars['String'];
-  /** 当前用户的所有课程 */
-  lessons: LessonsConnection;
-  name: Scalars['String'];
-  /** 微信openId,注册时传入微信code自动通过微信提供的接口获取获取 */
-  openId: Scalars['String'];
-  /** 当前用户创建的所有帖子 */
-  posts: PostsConnection;
-  postsWithRelay: PostsConnectionWithRelay;
-  /** 当前用户具有的权限 */
-  privileges: PrivilegesConnection;
-  /** 回复的通知 */
-  replyNotifications?: Maybe<NotificationsConnection>;
-  /** 当前用户收到的所有举报 */
-  reports: ReportsConnection;
-  /** 当前用户的所有角色 */
-  roles: RolesConnection;
-  /** 学校 */
-  school?: Maybe<Scalars['String']>;
-  /** 学号 */
-  studentId?: Maybe<Scalars['Int']>;
-  /** 校区 */
-  subCampus?: Maybe<Scalars['String']>;
-  /** 当前用户创建的所有主题 */
-  subjects: SubjectsConnection;
-  /** 微信unionId,注册时传入微信code自动通过微信提供的接口获取获取 */
-  unionId: Scalars['String'];
-  /** 用户信息的更新时间 */
-  updatedAt: Scalars['String'];
-  /** 点赞的通知 */
-  upvoteNotifications?: Maybe<VoteWithUnreadCountsConnection>;
-  userId: Scalars['String'];
-  /** 当前用户的所有点赞 */
-  votes: VotesConnection;
-  /** 当前用户的所有点赞 */
-  votesWithRelay: VotesConnectionWithRelay;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsCommentsArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsCommentsWithRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsConversationsArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsDeadlinesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsLessonsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  endYear: Scalars['Int'];
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-  semester: Scalars['Int'];
-  startYear: Scalars['Int'];
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsPostsArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsPostsWithRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsPrivilegesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsReplyNotificationsArgs = {
-  actions?: InputMaybe<Array<Notification_Action>>;
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-  type?: InputMaybe<Notification_Type>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsReportsArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsRolesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsSubjectsArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsUpvoteNotificationsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
-  type?: InputMaybe<Notification_Type>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsVotesArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
-
-/** 包含属性是否个人可见的用户对象 */
-export type UserWithPrivatePropsVotesWithRelayArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Order_By>;
 };
 
 export type UsersConnection = {
@@ -3501,6 +3733,8 @@ export type WeappTemplateMsg = {
   template_id: Scalars['String'];
 };
 
+export type WhoAmIUnion = Admin | User;
+
 export type WxSubscriptionInfo = {
   __typename?: 'WxSubscriptionInfo';
   /** 用户所在的分组ID（兼容旧的用户分组接口） */
@@ -3530,6 +3764,14 @@ export type PostsQueryVariables = Exact<{
 
 
 export type PostsQuery = { __typename?: 'Query', postsWithRelay: { __typename?: 'PostsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'PostPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'PostEdge', node?: { __typename?: 'Post', id: string, content: string, createdAt: string, images: Array<string | null>, creator?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null, anonymous?: { __typename?: 'Anonymous', id: string, subCampus?: string | null, watermark: string } | null, commentsWithRelay: { __typename?: 'CommentsConnectionWithRelay', totalCount: number }, votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, viewerCanUpvote: boolean, viewerHasUpvoted: boolean } } | null }> } };
+
+export type UsersQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UsersQuery = { __typename?: 'Query', usersWithRelay: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, createdAt: string, avatarImageUrl?: string | null, credential?: { __typename?: 'ICredential', id: string } | null } | null }> } };
 
 
 export const PostsDocument = gql`
@@ -3600,3 +3842,56 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const UsersDocument = gql`
+    query Users($first: Int, $after: String) {
+  usersWithRelay(first: $first, after: $after) {
+    totalCount
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        createdAt
+        avatarImageUrl
+        credential {
+          id
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+      }
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        }
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;

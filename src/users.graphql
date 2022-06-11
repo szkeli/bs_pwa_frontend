@@ -1,0 +1,22 @@
+query Users($first: Int, $after: String) {
+    usersWithRelay(first: $first, after: $after) {
+        totalCount
+        pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+        }
+        edges {
+            node {
+                id
+                name
+                createdAt
+                avatarImageUrl
+                credential {
+                    id
+                }
+            }
+        }
+    }
+}
