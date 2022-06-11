@@ -12,6 +12,7 @@ import Home from './Home';
 import Me from './Me';
 import Users from './Users';
 import Universities from './Universities';
+import University from './University';
 
 function App() {
   const [value, setValue] = useState(0);
@@ -33,6 +34,11 @@ function App() {
       </Routes>
       <Routes>
         <Route path='/universities' element={<Universities />} />
+      </Routes>
+      <Routes>
+        <Route path="/university">
+          <Route path=":id" element={<University />} />
+        </Route>
       </Routes>
       <Paper sx={{ position: 'absolute', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation

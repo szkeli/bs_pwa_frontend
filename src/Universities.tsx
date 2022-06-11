@@ -1,8 +1,10 @@
 import { Avatar, Divider, ListItem, ListItemAvatar, ListItemText, Paper } from "@mui/material"
+import { useNavigate } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso"
 import { UniversitiesQuery, useUniversitiesQuery } from "./generated/graphql"
 
 export default () => {
+    const navigate = useNavigate();
     const { loading, error, data, fetchMore } = useUniversitiesQuery({
         variables: {
             first: 20,
@@ -20,7 +22,9 @@ export default () => {
 
         return (
             <>
-                <ListItem button>
+                <ListItem button onClick={() => {
+                    navigate(`/university/${university?.id}`)
+                }}>
                     <ListItemAvatar>
                         <Avatar alt='avatar' src={university?.logoUrl ?? ''} />
                     </ListItemAvatar>

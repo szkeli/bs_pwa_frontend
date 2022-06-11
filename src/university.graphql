@@ -1,0 +1,7 @@
+query University($id: String!) {
+  university(id: $id) {
+    id
+    name
+    logoUrl
+  }
+}

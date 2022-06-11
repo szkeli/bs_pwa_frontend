@@ -3773,6 +3773,13 @@ export type UniversitiesQueryVariables = Exact<{
 
 export type UniversitiesQuery = { __typename?: 'Query', universities: { __typename?: 'UniversitiesConnection', totalCount: number, pageInfo: { __typename?: 'UniversityPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'UniversityEdge', node?: { __typename?: 'University', id: string, name: string, createdAt: string, logoUrl: string, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number }, institutes: { __typename?: 'InstitutesConnection', totalCount: number } } | null }> } };
 
+export type UniversityQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string } };
+
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -3906,6 +3913,43 @@ export function useUniversitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type UniversitiesQueryHookResult = ReturnType<typeof useUniversitiesQuery>;
 export type UniversitiesLazyQueryHookResult = ReturnType<typeof useUniversitiesLazyQuery>;
 export type UniversitiesQueryResult = Apollo.QueryResult<UniversitiesQuery, UniversitiesQueryVariables>;
+export const UniversityDocument = gql`
+    query University($id: String!) {
+  university(id: $id) {
+    id
+    name
+    logoUrl
+  }
+}
+    `;
+
+/**
+ * __useUniversityQuery__
+ *
+ * To run a query within a React component, call `useUniversityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUniversityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUniversityQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUniversityQuery(baseOptions: Apollo.QueryHookOptions<UniversityQuery, UniversityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UniversityQuery, UniversityQueryVariables>(UniversityDocument, options);
+      }
+export function useUniversityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UniversityQuery, UniversityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UniversityQuery, UniversityQueryVariables>(UniversityDocument, options);
+        }
+export type UniversityQueryHookResult = ReturnType<typeof useUniversityQuery>;
+export type UniversityLazyQueryHookResult = ReturnType<typeof useUniversityLazyQuery>;
+export type UniversityQueryResult = Apollo.QueryResult<UniversityQuery, UniversityQueryVariables>;
 export const UsersDocument = gql`
     query Users($first: Int, $after: String) {
   usersWithRelay(first: $first, after: $after) {
