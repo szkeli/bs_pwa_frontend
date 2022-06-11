@@ -1,7 +1,7 @@
-import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Paper } from "@mui/material"
+import { Avatar, Divider, IconButton, ListItem, ListItemAvatar, ListItemText, Paper } from "@mui/material"
 import { Virtuoso } from "react-virtuoso"
 import { UsersQuery, useUsersQuery } from "./generated/graphql"
-import { Comment as CommentIcon, VerifiedUser as VerifiedUserIcon } from '@mui/icons-material';
+import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material';
 
 export default () => {
     const { loading, error, data, fetchMore } = useUsersQuery({
@@ -20,32 +20,36 @@ export default () => {
         const verified = user?.credential;
 
         return (
-            <ListItem button secondaryAction={
-                verified ? (<IconButton edge="end" aria-label="comments">
-                    <VerifiedUserIcon color="primary"/>
-                </IconButton>) : (<></>)
-            }>
-                <ListItemAvatar>
-                    <Avatar alt='avatar' src={user?.avatarImageUrl ?? ''} />
-                </ListItemAvatar>
-                <ListItemText
-                    primary={user?.name ?? 'N/A'}
-                    secondary={`${user?.createdAt}加入` ?? 'N/A'} />
-            </ListItem>
+            <>
+                <ListItem button secondaryAction={
+                    verified ? (<IconButton edge="end" aria-label="comments">
+                        <VerifiedUserIcon color="primary" />
+                    </IconButton>) : (<></>)
+                }>
+                    <ListItemAvatar>
+                        <Avatar alt='avatar' src={user?.avatarImageUrl ?? ''} />
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={user?.name ?? 'N/A'}
+                        secondary={`${user?.createdAt}加入` ?? 'N/A'} />
+                </ListItem>
+                <Divider variant="inset" />
+            </>
         )
     }
 
     return (
-        <Paper sx={{ backgroundColor: '#eee', flexGrow: 1, height: '100%' }}>
+        <Paper sx={{ flexGrow: 1, height: '100%' }}>
             <Virtuoso
-                style={{ height: 'calc(100vh - 56px' }}
+                style={{ height: 'calc(100vh - 56px', flexGrow: 1 }}
                 totalCount={data?.usersWithRelay.edges.length ?? 0}
                 itemContent={(index) => itemContent(index, data)}
-                endReached={index => {
+                endReached={() => {
+                    console.error('dddddddddenddndsaoijdsu')
                     fetchMore({
                         variables: {
                             after: pageInfo?.endCursor,
-                            first: 10
+                            first: 20
                         }
                     })
                 }} />
