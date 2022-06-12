@@ -12,14 +12,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
-const history = createBrowserHistory({ window });
-
-
-if(window.history.scrollRestoration) {
-  window.history.scrollRestoration = 'auto';
-  console.error('设置自动恢复')
-}
-
 const cache = new InMemoryCache({
   typePolicies: {
     Post: {
@@ -58,9 +50,9 @@ root.render(
   <ApolloProvider client={client}>
     <React.StrictMode>
       <CssBaseline />
-      <HistoryRouter history={history}>
+      <BrowserRouter>
         <App />
-      </HistoryRouter>
+      </BrowserRouter>
     </React.StrictMode>
   </ApolloProvider>
 );

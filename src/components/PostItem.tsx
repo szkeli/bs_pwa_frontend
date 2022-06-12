@@ -75,8 +75,6 @@ function VotesList(props: { postId: string | undefined }) {
                     }
                 })
             }} />
-
-
     )
 }
 
