@@ -1,0 +1,23 @@
+query PostVotes($id: String!) {
+    post(id: $id) {
+        votesWithRelay {
+            totalCount
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
+            }
+            edges {
+                node {
+                    id
+                    creator {
+                        id
+                        name
+                        avatarImageUrl
+                    }
+                }
+            }
+        }
+    }
+}

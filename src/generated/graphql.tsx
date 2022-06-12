@@ -3797,6 +3797,13 @@ export type PostsQueryVariables = Exact<{
 
 export type PostsQuery = { __typename?: 'Query', postsWithRelay: { __typename?: 'PostsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'PostPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'PostEdge', node?: { __typename?: 'Post', id: string, content: string, createdAt: string, images: Array<string | null>, creator?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null, anonymous?: { __typename?: 'Anonymous', id: string, subCampus?: string | null, watermark: string } | null, commentsWithRelay: { __typename?: 'CommentsConnectionWithRelay', totalCount: number }, votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, viewerCanUpvote: boolean, viewerHasUpvoted: boolean } } | null }> } };
 
+export type PostVotesQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type PostVotesQuery = { __typename?: 'Query', post: { __typename?: 'Post', votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, pageInfo?: { __typename?: 'VotePageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'VoteEdge', node?: { __typename?: 'Vote', id: string, creator: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } } | null }> | null } } };
+
 export type UniversitiesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -3907,6 +3914,59 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const PostVotesDocument = gql`
+    query PostVotes($id: String!) {
+  post(id: $id) {
+    votesWithRelay {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          creator {
+            id
+            name
+            avatarImageUrl
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePostVotesQuery__
+ *
+ * To run a query within a React component, call `usePostVotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostVotesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePostVotesQuery(baseOptions: Apollo.QueryHookOptions<PostVotesQuery, PostVotesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostVotesQuery, PostVotesQueryVariables>(PostVotesDocument, options);
+      }
+export function usePostVotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostVotesQuery, PostVotesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostVotesQuery, PostVotesQueryVariables>(PostVotesDocument, options);
+        }
+export type PostVotesQueryHookResult = ReturnType<typeof usePostVotesQuery>;
+export type PostVotesLazyQueryHookResult = ReturnType<typeof usePostVotesLazyQuery>;
+export type PostVotesQueryResult = Apollo.QueryResult<PostVotesQuery, PostVotesQueryVariables>;
 export const UniversitiesDocument = gql`
     query Universities($first: Int, $after: String) {
   universities(first: $first, after: $after) {
