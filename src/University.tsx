@@ -12,6 +12,7 @@ import { UniversityQueryHookResult, useUniversityQuery } from "./generated/graph
 import { Edit as EditIcon, Add as AddIcon } from '@mui/icons-material';
 import { Virtuoso } from "react-virtuoso";
 import UserItem from "./components/UserItem";
+import PostItem from "./components/PostItem";
 
 export default () => {
     let { id } = useParams();
@@ -25,7 +26,7 @@ export default () => {
 
     const { loading, error, data } = res
 
-    if(error) return <div>Something gone error...</div>
+    if (error) return <div>Something gone error...</div>
     if (loading) return <div>Loading...</div>
 
     return (
@@ -53,7 +54,7 @@ function Header(props: { universityQueryHookResult?: UniversityQueryHookResult }
     )
 }
 
-function MTabs(props: { universityQueryHookResult?: UniversityQueryHookResult}) {
+function MTabs(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -67,42 +68,78 @@ function MTabs(props: { universityQueryHookResult?: UniversityQueryHookResult}) 
     const subcampusesLabel = `校区${university?.subcampuses.totalCount}`
     const subjectsLabel = `主题${university?.subjects.totalCount}`
     const usersLabel = `用户${university?.users.totalCount}`
+    const postsLabel = `帖子${university?.posts.totalCount}`
 
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
-                <Tabs value={value} onChange={handleChange}>
-                    <Tab label={institutesLabel} {...a11yProps(0)} />
-                    <Tab label={subcampusesLabel} {...a11yProps(1)} />
-                    <Tab label={subjectsLabel} {...a11yProps(2)} />
-                    <Tab label={usersLabel} {...a11yProps(3)} />
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    variant="scrollable"
+                    scrollButtons={false}
+                >
+                    <Tab label={postsLabel} {...a11yProps(0)} />
+                    <Tab label={institutesLabel} {...a11yProps(1)} />
+                    <Tab label={subcampusesLabel} {...a11yProps(2)} />
+                    <Tab label={subjectsLabel} {...a11yProps(3)} />
+                    <Tab label={usersLabel} {...a11yProps(4)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <InstitutesList universityQueryHookResult={props.universityQueryHookResult} />
+                <PostsList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <SubCampusesList universityQueryHookResult={props.universityQueryHookResult} />
+                <InstitutesList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <SubjectsList universityQueryHookResult={props.universityQueryHookResult} />
+                <SubCampusesList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
             <TabPanel value={value} index={3}>
+                <SubjectsList universityQueryHookResult={props.universityQueryHookResult} />
+            </TabPanel>
+            <TabPanel value={value} index={4}>
                 <UsersList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
+
         </Box>
 
     )
 }
 
-function PostsList(props: {universityQueryHookResult?: UniversityQueryHookResult}) {
+function PostsList(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
     const university = props.universityQueryHookResult?.data?.university
     const posts = university?.posts
     const pageInfo = university?.posts.pageInfo
     const fetchMore = props.universityQueryHookResult?.fetchMore
+
+    return (
+        <>
+            <SpeedDial
+                ariaLabel="SpeedDial"
+                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
+                icon={<AddIcon />} />
+            <Virtuoso
+                style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
+                totalCount={posts?.edges.length ?? 0}
+                itemContent={(index) => {
+                    return <PostItem post={posts?.edges[index].node} />
+                }}
+                endReached={index => {
+                    fetchMore && fetchMore({
+                        variables: {
+                            postsAfter: pageInfo?.endCursor,
+                            postsFirst: 10,
+                        }
+                    })
+                }}
+            >
+            </Virtuoso>
+        </>
+    )
 }
 
-function UsersList(props: {universityQueryHookResult?: UniversityQueryHookResult}) {
+function UsersList(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
     const university = props.universityQueryHookResult?.data?.university
     const users = university?.users
     const pageInfo = university?.users.pageInfo
@@ -117,7 +154,7 @@ function UsersList(props: {universityQueryHookResult?: UniversityQueryHookResult
                     return <UserItem user={users?.edges[index].node} />
                 }}
                 endReached={index => {
-                    console.error({index, fetchMore})
+                    console.error({ index, fetchMore })
                     fetchMore && fetchMore({
                         variables: {
                             usersAfter: pageInfo?.endCursor,
@@ -131,7 +168,7 @@ function UsersList(props: {universityQueryHookResult?: UniversityQueryHookResult
     )
 }
 
-function SubjectsList(props: {universityQueryHookResult?: UniversityQueryHookResult}) {
+function SubjectsList(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
     const university = props.universityQueryHookResult?.data?.university
     const subjects = university?.subjects
 
