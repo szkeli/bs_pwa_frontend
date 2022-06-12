@@ -23,8 +23,6 @@ export default () => {
         }
     })
 
-    console.error(res)
-
     const { loading, error, data } = res
 
     if(error) return <div>Something gone error...</div>
@@ -95,6 +93,13 @@ function MTabs(props: { universityQueryHookResult?: UniversityQueryHookResult}) 
         </Box>
 
     )
+}
+
+function PostsList(props: {universityQueryHookResult?: UniversityQueryHookResult}) {
+    const university = props.universityQueryHookResult?.data?.university
+    const posts = university?.posts
+    const pageInfo = university?.posts.pageInfo
+    const fetchMore = props.universityQueryHookResult?.fetchMore
 }
 
 function UsersList(props: {universityQueryHookResult?: UniversityQueryHookResult}) {

@@ -3815,10 +3815,12 @@ export type UniversityQueryVariables = Exact<{
   subjectsAfter?: InputMaybe<Scalars['String']>;
   usersFirst?: InputMaybe<Scalars['Int']>;
   usersAfter?: InputMaybe<Scalars['String']>;
+  postsFirst?: InputMaybe<Scalars['Int']>;
+  postsAfter?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, users: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null } | null }> }, subjects: { __typename?: 'SubjectsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'SubjectPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> }, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
+export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, posts: { __typename?: 'PostsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'PostPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'PostEdge', node?: { __typename?: 'Post', id: string, content: string, createdAt: string, images: Array<string | null>, creator?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null, anonymous?: { __typename?: 'Anonymous', id: string, subCampus?: string | null, watermark: string } | null, commentsWithRelay: { __typename?: 'CommentsConnectionWithRelay', totalCount: number }, votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, viewerHasUpvoted: boolean, viewerCanUpvote: boolean } } | null }> }, users: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null } | null }> }, subjects: { __typename?: 'SubjectsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'SubjectPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> }, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -3954,11 +3956,46 @@ export type UniversitiesQueryHookResult = ReturnType<typeof useUniversitiesQuery
 export type UniversitiesLazyQueryHookResult = ReturnType<typeof useUniversitiesLazyQuery>;
 export type UniversitiesQueryResult = Apollo.QueryResult<UniversitiesQuery, UniversitiesQueryVariables>;
 export const UniversityDocument = gql`
-    query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String, $subjectsFirst: Int, $subjectsAfter: String, $usersFirst: Int, $usersAfter: String) {
+    query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String, $subjectsFirst: Int, $subjectsAfter: String, $usersFirst: Int, $usersAfter: String, $postsFirst: Int, $postsAfter: String) {
   university(id: $id) {
     id
     name
     logoUrl
+    posts(first: $postsFirst, after: $postsAfter) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          content
+          createdAt
+          images
+          creator {
+            id
+            name
+            avatarImageUrl
+          }
+          anonymous {
+            id
+            subCampus
+            watermark
+          }
+          commentsWithRelay {
+            totalCount
+          }
+          votesWithRelay {
+            totalCount
+            viewerHasUpvoted
+            viewerCanUpvote
+          }
+        }
+      }
+    }
     users(first: $usersFirst, after: $usersAfter) {
       totalCount
       pageInfo {
@@ -4049,6 +4086,8 @@ export const UniversityDocument = gql`
  *      subjectsAfter: // value for 'subjectsAfter'
  *      usersFirst: // value for 'usersFirst'
  *      usersAfter: // value for 'usersAfter'
+ *      postsFirst: // value for 'postsFirst'
+ *      postsAfter: // value for 'postsAfter'
  *   },
  * });
  */

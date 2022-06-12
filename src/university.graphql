@@ -3,11 +3,47 @@ $institutesFirst: Int, $institutesAfter: String,
 $subcampusesFirst: Int, $subcampusesAfter: String,
 $subjectsFirst: Int, $subjectsAfter: String,
 $usersFirst: Int, $usersAfter: String,
+$postsFirst: Int, $postsAfter: String,
 ) {
   university(id: $id) {
     id
     name
     logoUrl
+    posts(first: $postsFirst, after: $postsAfter) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          content
+          createdAt
+          images
+          creator {
+            id
+            name
+            avatarImageUrl
+          }
+          anonymous {
+            id
+            subCampus
+            watermark
+          }
+          commentsWithRelay {
+            totalCount
+          }
+          votesWithRelay {
+            totalCount
+            viewerHasUpvoted
+            viewerCanUpvote
+          }
+        }
+      }
+    }
     users(first: $usersFirst, after: $usersAfter) {
       totalCount
       pageInfo {

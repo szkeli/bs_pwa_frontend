@@ -25,6 +25,7 @@ const cache = new InMemoryCache({
     University: {
       fields: {
         users: relayStylePagination(),
+        posts: relayStylePagination(),
       }
     },
     Query: {
