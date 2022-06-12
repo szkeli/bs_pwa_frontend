@@ -8,9 +8,10 @@ import {
     Report as ReportIcon,
     AutoFixHighRounded as AuthenIcon
 } from "@mui/icons-material"
-import { Avatar, Collapse, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
+import { Avatar, Button, Collapse, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useLoginStatus } from "./hooks"
 
 const networks = [
     {
@@ -25,10 +26,11 @@ const networks = [
 
 export default () => {
     const navigate = useNavigate();
+    const loginState = useLoginStatus();
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(() => {
         const v = localStorage.getItem('network');
-        
+
         return v ?? networks[0].url
     });
 
@@ -62,7 +64,7 @@ export default () => {
                     </ListItemAvatar>
                     <ListItemText primary="设置网络接入点" secondary={selectedValue} />
                 </ListItemButton>
-                <ListItemButton onClick={ () => navigate('/universities', {replace: true})}>
+                <ListItemButton onClick={() => navigate('/universities', { replace: true })}>
                     <ListItemText primary="所有大学" />
                 </ListItemButton>
                 <ListItemButton onClick={handleClickAdminPanel}>
@@ -74,7 +76,7 @@ export default () => {
                 </ListItemButton>
                 <Collapse in={openAdminPanel} timeout='auto' unmountOnExit>
                     <List component='div' disablePadding>
-                        <ListItemButton onClick={ () => {
+                        <ListItemButton onClick={() => {
                             navigate('/userautheninfos')
                         }}>
                             <ListItemIcon>
@@ -96,8 +98,22 @@ export default () => {
                 open={open}
                 onClose={handleClose}
             />
+            {!loginState ? (
+                <Stack
+                    spacing={2}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            navigate('/login')
+                        }}
+                    >登录</Button>
+                </Stack>
+            ) : (<></>)}
         </>
-
     )
 }
 
@@ -124,7 +140,7 @@ function SelectNetworkDialog(props: SelectNetworkDialogProps) {
             <DialogTitle>选择网络接入点</DialogTitle>
             <List>
                 {
-                    networks.map(({url, tip}) => (
+                    networks.map(({ url, tip }) => (
                         <ListItemButton
                             key={url}
                             onClick={() => handleListItemClick(url)}>

@@ -3789,6 +3789,21 @@ export type WxSubscriptionInfo = {
   unionid: Scalars['String'];
 };
 
+export type LoginByCodeMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type LoginByCodeMutation = { __typename?: 'Mutation', loginByCode: { __typename?: 'LoginResult', token: string, id: string } };
+
+export type LoginByUserIdMutationVariables = Exact<{
+  userId: Scalars['String'];
+  sign: Scalars['String'];
+}>;
+
+
+export type LoginByUserIdMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResult', token: string, id: string } };
+
 export type PostsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -3848,6 +3863,75 @@ export type UsersQueryVariables = Exact<{
 export type UsersQuery = { __typename?: 'Query', usersWithRelay: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, createdAt: string, avatarImageUrl?: string | null, credential?: { __typename?: 'ICredential', id: string } | null } | null }> } };
 
 
+export const LoginByCodeDocument = gql`
+    mutation loginByCode($code: String!) {
+  loginByCode(code: $code) {
+    token
+    id
+  }
+}
+    `;
+export type LoginByCodeMutationFn = Apollo.MutationFunction<LoginByCodeMutation, LoginByCodeMutationVariables>;
+
+/**
+ * __useLoginByCodeMutation__
+ *
+ * To run a mutation, you first call `useLoginByCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginByCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginByCodeMutation, { data, loading, error }] = useLoginByCodeMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useLoginByCodeMutation(baseOptions?: Apollo.MutationHookOptions<LoginByCodeMutation, LoginByCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginByCodeMutation, LoginByCodeMutationVariables>(LoginByCodeDocument, options);
+      }
+export type LoginByCodeMutationHookResult = ReturnType<typeof useLoginByCodeMutation>;
+export type LoginByCodeMutationResult = Apollo.MutationResult<LoginByCodeMutation>;
+export type LoginByCodeMutationOptions = Apollo.BaseMutationOptions<LoginByCodeMutation, LoginByCodeMutationVariables>;
+export const LoginByUserIdDocument = gql`
+    mutation loginByUserId($userId: String!, $sign: String!) {
+  login(userId: $userId, sign: $sign) {
+    token
+    id
+  }
+}
+    `;
+export type LoginByUserIdMutationFn = Apollo.MutationFunction<LoginByUserIdMutation, LoginByUserIdMutationVariables>;
+
+/**
+ * __useLoginByUserIdMutation__
+ *
+ * To run a mutation, you first call `useLoginByUserIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginByUserIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginByUserIdMutation, { data, loading, error }] = useLoginByUserIdMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      sign: // value for 'sign'
+ *   },
+ * });
+ */
+export function useLoginByUserIdMutation(baseOptions?: Apollo.MutationHookOptions<LoginByUserIdMutation, LoginByUserIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginByUserIdMutation, LoginByUserIdMutationVariables>(LoginByUserIdDocument, options);
+      }
+export type LoginByUserIdMutationHookResult = ReturnType<typeof useLoginByUserIdMutation>;
+export type LoginByUserIdMutationResult = Apollo.MutationResult<LoginByUserIdMutation>;
+export type LoginByUserIdMutationOptions = Apollo.BaseMutationOptions<LoginByUserIdMutation, LoginByUserIdMutationVariables>;
 export const PostsDocument = gql`
     query Posts($first: Int, $after: String) {
   postsWithRelay(first: $first, after: $after) {

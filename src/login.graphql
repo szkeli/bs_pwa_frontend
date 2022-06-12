@@ -1,0 +1,13 @@
+mutation loginByCode($code: String!) {
+    loginByCode(code: $code) {
+        token
+        id
+    }
+}
+
+mutation loginByUserId($userId: String!, $sign: String!) {
+    login(userId: $userId, sign: $sign) {
+        token
+        id
+    }
+}
