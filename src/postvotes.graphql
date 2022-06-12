@@ -1,6 +1,6 @@
-query PostVotes($id: String!) {
+query PostVotes($id: String!, $after: String, $first: Int) {
     post(id: $id) {
-        votesWithRelay {
+        votesWithRelay(first: $first, after: $after) {
             totalCount
             pageInfo {
                 hasNextPage

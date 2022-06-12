@@ -3799,6 +3799,8 @@ export type PostsQuery = { __typename?: 'Query', postsWithRelay: { __typename?: 
 
 export type PostVotesQueryVariables = Exact<{
   id: Scalars['String'];
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -3915,9 +3917,9 @@ export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
 export const PostVotesDocument = gql`
-    query PostVotes($id: String!) {
+    query PostVotes($id: String!, $after: String, $first: Int) {
   post(id: $id) {
-    votesWithRelay {
+    votesWithRelay(first: $first, after: $after) {
       totalCount
       pageInfo {
         hasNextPage
@@ -3953,6 +3955,8 @@ export const PostVotesDocument = gql`
  * const { data, loading, error } = usePostVotesQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      after: // value for 'after'
+ *      first: // value for 'first'
  *   },
  * });
  */

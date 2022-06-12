@@ -33,20 +33,23 @@ export interface PostItemProps {
 function VotesList(props: { postId: string | undefined }) {
 
     const { data, loading, error, fetchMore } = usePostVotesQuery({
-        variables: { id: props.postId ?? '' }
+        variables: {
+            id: props.postId ?? '',
+            first: 10,
+        }
     })
 
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Something went wrong</div>
-    
+
     const votes = data?.post.votesWithRelay.edges
     const pageInfo = data?.post.votesWithRelay.pageInfo
 
     const itemContent = (index: number, data?: PostVotesQuery | undefined) => {
         const edges = data?.post.votesWithRelay.edges
-        
-        if(!edges) return <div>Error...</div>
+
+        if (!edges) return <div>Error...</div>
 
         const creator = edges[index].node?.creator
 

@@ -22,6 +22,11 @@ if(window.history.scrollRestoration) {
 
 const cache = new InMemoryCache({
   typePolicies: {
+    Post: {
+      fields: {
+        votesWithRelay: relayStylePagination(),
+      }
+    },
     University: {
       fields: {
         users: relayStylePagination(),
