@@ -13,6 +13,7 @@ import Me from './Me';
 import Users from './Users';
 import Universities from './Universities';
 import University from './University';
+import UserAuthenInfos from './UserAuthenInfos';
 
 function App() {
   const [value, setValue] = useState(0);
@@ -39,6 +40,9 @@ function App() {
         <Route path="/university">
           <Route path=":id" element={<University />} />
         </Route>
+      </Routes>
+      <Routes>
+        <Route path="/userautheninfos" element={<UserAuthenInfos />}/>
       </Routes>
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation

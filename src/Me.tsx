@@ -74,7 +74,9 @@ export default () => {
                 </ListItemButton>
                 <Collapse in={openAdminPanel} timeout='auto' unmountOnExit>
                     <List component='div' disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={ () => {
+                            navigate('/userautheninfos')
+                        }}>
                             <ListItemIcon>
                                 <AuthenIcon />
                             </ListItemIcon>

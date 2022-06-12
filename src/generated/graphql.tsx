@@ -3822,6 +3822,14 @@ export type UniversityQueryVariables = Exact<{
 
 export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, posts: { __typename?: 'PostsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'PostPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'PostEdge', node?: { __typename?: 'Post', id: string, content: string, createdAt: string, images: Array<string | null>, creator?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null, anonymous?: { __typename?: 'Anonymous', id: string, subCampus?: string | null, watermark: string } | null, commentsWithRelay: { __typename?: 'CommentsConnectionWithRelay', totalCount: number }, votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, viewerHasUpvoted: boolean, viewerCanUpvote: boolean } } | null }> }, users: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null } | null }> }, subjects: { __typename?: 'SubjectsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'SubjectPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> }, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
 
+export type UserautheninfosQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UserautheninfosQuery = { __typename?: 'Query', userAuthenInfos: { __typename?: 'UserAuthenInfosConnection', totalCount: number, pageInfo: { __typename?: 'UserAuthenInfoPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserAuthenInfoEdge', node?: { __typename?: 'UserAuthenInfo', id: string, avatarImageUrl: string, to: { __typename?: 'User', id: string, name: string } } | null }> } };
+
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -4102,6 +4110,58 @@ export function useUniversityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type UniversityQueryHookResult = ReturnType<typeof useUniversityQuery>;
 export type UniversityLazyQueryHookResult = ReturnType<typeof useUniversityLazyQuery>;
 export type UniversityQueryResult = Apollo.QueryResult<UniversityQuery, UniversityQueryVariables>;
+export const UserautheninfosDocument = gql`
+    query userautheninfos($first: Int, $after: String) {
+  userAuthenInfos(first: $first, after: $after) {
+    totalCount
+    pageInfo {
+      hasNextPage
+      startCursor
+      endCursor
+      hasPreviousPage
+    }
+    edges {
+      node {
+        id
+        avatarImageUrl
+        to {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserautheninfosQuery__
+ *
+ * To run a query within a React component, call `useUserautheninfosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserautheninfosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserautheninfosQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useUserautheninfosQuery(baseOptions?: Apollo.QueryHookOptions<UserautheninfosQuery, UserautheninfosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserautheninfosQuery, UserautheninfosQueryVariables>(UserautheninfosDocument, options);
+      }
+export function useUserautheninfosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserautheninfosQuery, UserautheninfosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserautheninfosQuery, UserautheninfosQueryVariables>(UserautheninfosDocument, options);
+        }
+export type UserautheninfosQueryHookResult = ReturnType<typeof useUserautheninfosQuery>;
+export type UserautheninfosLazyQueryHookResult = ReturnType<typeof useUserautheninfosLazyQuery>;
+export type UserautheninfosQueryResult = Apollo.QueryResult<UserautheninfosQuery, UserautheninfosQueryVariables>;
 export const UsersDocument = gql`
     query Users($first: Int, $after: String) {
   usersWithRelay(first: $first, after: $after) {

@@ -1,0 +1,21 @@
+query userautheninfos($first: Int, $after: String) {
+  userAuthenInfos(first: $first, after: $after) {
+    totalCount
+    pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+    }
+    edges {
+      node {
+        id
+        avatarImageUrl
+        to {
+          id
+          name
+        }
+      }
+    }
+  }
+}
