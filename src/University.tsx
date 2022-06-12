@@ -120,7 +120,7 @@ function PostsList(props: { universityQueryHookResult?: UniversityQueryHookResul
                 sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
                 icon={<AddIcon />} />
             <Virtuoso
-                style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
+                style={{ height: "calc(100vh - 56px)",backgroundColor: '#eee', flexGrow: 1 }}
                 totalCount={posts?.edges.length ?? 0}
                 itemContent={(index) => {
                     return <PostItem post={posts?.edges[index].node} />
