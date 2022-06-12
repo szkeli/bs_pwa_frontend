@@ -2,6 +2,7 @@ import { Avatar, Divider, IconButton, ListItem, ListItemAvatar, ListItemText, Pa
 import { Virtuoso } from "react-virtuoso"
 import { UsersQuery, useUsersQuery } from "./generated/graphql"
 import { VerifiedUser as VerifiedUserIcon } from '@mui/icons-material';
+import UserItem from "./components/UserItem";
 
 export default () => {
     const { loading, error, data, fetchMore } = useUsersQuery({
@@ -16,25 +17,8 @@ export default () => {
 
     const itemContent = (index: number, usersQuery: UsersQuery | undefined) => {
         const user = usersQuery?.usersWithRelay.edges[index].node
-        const verified = user?.credential;
 
-        return (
-            <>
-                <ListItem button secondaryAction={
-                    verified ? (<IconButton edge="end" aria-label="comments">
-                        <VerifiedUserIcon color="primary" />
-                    </IconButton>) : (<></>)
-                }>
-                    <ListItemAvatar>
-                        <Avatar alt='avatar' src={user?.avatarImageUrl ?? ''} />
-                    </ListItemAvatar>
-                    <ListItemText
-                        primary={user?.name ?? 'N/A'}
-                        secondary={`${user?.createdAt}加入` ?? 'N/A'} />
-                </ListItem>
-                <Divider variant="inset" />
-            </>
-        )
+        return <UserItem user={user} />
     }
 
     return (

@@ -21,6 +21,10 @@ $usersFirst: Int, $usersAfter: String,
           id
           name
           avatarImageUrl
+          createdAt
+          credential {
+            id
+          }
         }
       }
     }

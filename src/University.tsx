@@ -8,9 +8,10 @@ import {
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { InstitutesConnection, University, UniversityQuery, UniversityQueryHookResult, useUniversityQuery } from "./generated/graphql";
+import { UniversityQueryHookResult, useUniversityQuery } from "./generated/graphql";
 import { Edit as EditIcon, Add as AddIcon } from '@mui/icons-material';
 import { Virtuoso } from "react-virtuoso";
+import UserItem from "./components/UserItem";
 
 export default () => {
     let { id } = useParams();
@@ -108,11 +109,7 @@ function UsersList(props: {universityQueryHookResult?: UniversityQueryHookResult
                 style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
                 totalCount={users?.edges.length ?? 0}
                 itemContent={(index) => {
-                    return (
-                        <ListItem button>
-                            <ListItemText primary={users?.edges[index].node?.name ?? 'N/A'} />
-                        </ListItem>
-                    )
+                    return <UserItem user={users?.edges[index].node} />
                 }}
                 endReached={index => {
                     console.error({index, fetchMore})

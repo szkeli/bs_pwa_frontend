@@ -3818,7 +3818,7 @@ export type UniversityQueryVariables = Exact<{
 }>;
 
 
-export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, users: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null }> }, subjects: { __typename?: 'SubjectsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'SubjectPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> }, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
+export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, users: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null } | null }> }, subjects: { __typename?: 'SubjectsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'SubjectPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> }, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -3972,6 +3972,10 @@ export const UniversityDocument = gql`
           id
           name
           avatarImageUrl
+          createdAt
+          credential {
+            id
+          }
         }
       }
     }
