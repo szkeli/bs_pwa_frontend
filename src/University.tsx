@@ -8,7 +8,7 @@ import {
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { InstitutesConnection, University, UniversityQuery, useUniversityQuery } from "./generated/graphql";
+import { InstitutesConnection, University, UniversityQuery, UniversityQueryHookResult, useUniversityQuery } from "./generated/graphql";
 import { Edit as EditIcon, Add as AddIcon } from '@mui/icons-material';
 import { Virtuoso } from "react-virtuoso";
 
@@ -16,24 +16,29 @@ export default () => {
     let { id } = useParams();
     if (!id) return <div>Error</div>
 
-    const { loading, error, data } = useUniversityQuery({
+    const res = useUniversityQuery({
         variables: {
             id,
         }
     })
 
+    console.error(res)
+
+    const { loading, error, data } = res
+
+    if(error) return <div>Something gone error...</div>
     if (loading) return <div>Loading...</div>
 
     return (
         <Box>
-            <Header universityQuery={data} />
-            <MTabs universityQuery={data} />
+            <Header universityQueryHookResult={res} />
+            <MTabs universityQueryHookResult={res} />
         </Box>
     )
 }
 
-function Header(props: { universityQuery?: UniversityQuery }) {
-    const university = props.universityQuery?.university
+function Header(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
+    const university = props.universityQueryHookResult?.data?.university
 
     return (
         <ListItem secondaryAction={
@@ -49,14 +54,15 @@ function Header(props: { universityQuery?: UniversityQuery }) {
     )
 }
 
-function MTabs(props: { universityQuery?: UniversityQuery }) {
+function MTabs(props: { universityQueryHookResult?: UniversityQueryHookResult}) {
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     }
 
-    const university = props.universityQuery?.university
+    const universityQuery = props.universityQueryHookResult?.data
+    const university = universityQuery?.university
 
     const institutesLabel = `学院${university?.institutes.totalCount}`
     const subcampusesLabel = `校区${university?.subcampuses.totalCount}`
@@ -74,32 +80,30 @@ function MTabs(props: { universityQuery?: UniversityQuery }) {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <InstitutesList universityQuery={props.universityQuery} />
+                <InstitutesList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <SubCampusesList universityQuery={props.universityQuery} />
+                <SubCampusesList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <SubjectsList universityQuery={props.universityQuery} />
+                <SubjectsList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
             <TabPanel value={value} index={3}>
-                <UsersList universityQuery={props.universityQuery} />
+                <UsersList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
         </Box>
 
     )
 }
 
-function UsersList(props: {universityQuery?: UniversityQuery}) {
-    const university = props.universityQuery?.university
+function UsersList(props: {universityQueryHookResult?: UniversityQueryHookResult}) {
+    const university = props.universityQueryHookResult?.data?.university
     const users = university?.users
-    
+    const pageInfo = university?.users.pageInfo
+    const fetchMore = props.universityQueryHookResult?.fetchMore
+
     return (
         <>
-            <SpeedDial
-                ariaLabel="SpeedDial"
-                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
-                icon={<AddIcon />} />
             <Virtuoso
                 style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
                 totalCount={users?.edges.length ?? 0}
@@ -111,12 +115,13 @@ function UsersList(props: {universityQuery?: UniversityQuery}) {
                     )
                 }}
                 endReached={index => {
-                    // fetchMore({
-                    //     variables: {
-                    //         after: pageInfo?.endCursor,
-                    //         first: 10,
-                    //     }
-                    // })
+                    console.error({index, fetchMore})
+                    fetchMore && fetchMore({
+                        variables: {
+                            usersAfter: pageInfo?.endCursor,
+                            usersFirst: 10,
+                        }
+                    })
                 }}
             >
             </Virtuoso>
@@ -124,8 +129,8 @@ function UsersList(props: {universityQuery?: UniversityQuery}) {
     )
 }
 
-function SubjectsList(props: {universityQuery?: UniversityQuery}) {
-    const university = props.universityQuery?.university
+function SubjectsList(props: {universityQueryHookResult?: UniversityQueryHookResult}) {
+    const university = props.universityQueryHookResult?.data?.university
     const subjects = university?.subjects
 
     return (
@@ -157,8 +162,8 @@ function SubjectsList(props: {universityQuery?: UniversityQuery}) {
         </>
     )
 }
-function InstitutesList(props: { universityQuery?: UniversityQuery }) {
-    const university = props.universityQuery?.university
+function InstitutesList(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
+    const university = props.universityQueryHookResult?.data?.university
     const institutes = university?.institutes
 
     return (
@@ -191,8 +196,8 @@ function InstitutesList(props: { universityQuery?: UniversityQuery }) {
     )
 }
 
-function SubCampusesList(props: { universityQuery?: UniversityQuery }) {
-    const university = props.universityQuery?.university
+function SubCampusesList(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
+    const university = props.universityQueryHookResult?.data?.university
     const subCampuses = university?.subcampuses
 
     return (
@@ -222,7 +227,6 @@ function SubCampusesList(props: { universityQuery?: UniversityQuery }) {
             >
             </Virtuoso>
         </>
-
     )
 }
 

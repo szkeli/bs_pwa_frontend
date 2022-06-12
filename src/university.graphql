@@ -1,12 +1,14 @@
 query University($id: String!, 
 $institutesFirst: Int, $institutesAfter: String, 
 $subcampusesFirst: Int, $subcampusesAfter: String,
-$subjectsFirst: Int, $subjectsAfter: String) {
+$subjectsFirst: Int, $subjectsAfter: String,
+$usersFirst: Int, $usersAfter: String,
+) {
   university(id: $id) {
     id
     name
     logoUrl
-    users {
+    users(first: $usersFirst, after: $usersAfter) {
       totalCount
       pageInfo {
         hasNextPage

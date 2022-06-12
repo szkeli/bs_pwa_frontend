@@ -3813,6 +3813,8 @@ export type UniversityQueryVariables = Exact<{
   subcampusesAfter?: InputMaybe<Scalars['String']>;
   subjectsFirst?: InputMaybe<Scalars['Int']>;
   subjectsAfter?: InputMaybe<Scalars['String']>;
+  usersFirst?: InputMaybe<Scalars['Int']>;
+  usersAfter?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -3952,12 +3954,12 @@ export type UniversitiesQueryHookResult = ReturnType<typeof useUniversitiesQuery
 export type UniversitiesLazyQueryHookResult = ReturnType<typeof useUniversitiesLazyQuery>;
 export type UniversitiesQueryResult = Apollo.QueryResult<UniversitiesQuery, UniversitiesQueryVariables>;
 export const UniversityDocument = gql`
-    query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String, $subjectsFirst: Int, $subjectsAfter: String) {
+    query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String, $subjectsFirst: Int, $subjectsAfter: String, $usersFirst: Int, $usersAfter: String) {
   university(id: $id) {
     id
     name
     logoUrl
-    users {
+    users(first: $usersFirst, after: $usersAfter) {
       totalCount
       pageInfo {
         hasNextPage
@@ -4041,6 +4043,8 @@ export const UniversityDocument = gql`
  *      subcampusesAfter: // value for 'subcampusesAfter'
  *      subjectsFirst: // value for 'subjectsFirst'
  *      subjectsAfter: // value for 'subjectsAfter'
+ *      usersFirst: // value for 'usersFirst'
+ *      usersAfter: // value for 'usersAfter'
  *   },
  * });
  */
