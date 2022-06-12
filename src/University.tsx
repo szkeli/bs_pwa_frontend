@@ -60,6 +60,8 @@ function MTabs(props: { universityQuery?: UniversityQuery }) {
 
     const institutesLabel = `学院${university?.institutes.totalCount}`
     const subcampusesLabel = `校区${university?.subcampuses.totalCount}`
+    const subjectsLabel = `主题${university?.subjects.totalCount}`
+    const usersLabel = `用户${university?.users.totalCount}`
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -67,6 +69,8 @@ function MTabs(props: { universityQuery?: UniversityQuery }) {
                 <Tabs value={value} onChange={handleChange}>
                     <Tab label={institutesLabel} {...a11yProps(0)} />
                     <Tab label={subcampusesLabel} {...a11yProps(1)} />
+                    <Tab label={subjectsLabel} {...a11yProps(2)} />
+                    <Tab label={usersLabel} {...a11yProps(3)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
@@ -75,11 +79,84 @@ function MTabs(props: { universityQuery?: UniversityQuery }) {
             <TabPanel value={value} index={1}>
                 <SubCampusesList universityQuery={props.universityQuery} />
             </TabPanel>
+            <TabPanel value={value} index={2}>
+                <SubjectsList universityQuery={props.universityQuery} />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                <UsersList universityQuery={props.universityQuery} />
+            </TabPanel>
         </Box>
 
     )
 }
 
+function UsersList(props: {universityQuery?: UniversityQuery}) {
+    const university = props.universityQuery?.university
+    const users = university?.users
+    
+    return (
+        <>
+            <SpeedDial
+                ariaLabel="SpeedDial"
+                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
+                icon={<AddIcon />} />
+            <Virtuoso
+                style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
+                totalCount={users?.edges.length ?? 0}
+                itemContent={(index) => {
+                    return (
+                        <ListItem button>
+                            <ListItemText primary={users?.edges[index].node?.name ?? 'N/A'} />
+                        </ListItem>
+                    )
+                }}
+                endReached={index => {
+                    // fetchMore({
+                    //     variables: {
+                    //         after: pageInfo?.endCursor,
+                    //         first: 10,
+                    //     }
+                    // })
+                }}
+            >
+            </Virtuoso>
+        </>
+    )
+}
+
+function SubjectsList(props: {universityQuery?: UniversityQuery}) {
+    const university = props.universityQuery?.university
+    const subjects = university?.subjects
+
+    return (
+        <>
+            <SpeedDial
+                ariaLabel="SpeedDial"
+                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
+                icon={<AddIcon />} />
+            <Virtuoso
+                style={{ height: "calc(100vh - 56px)", flexGrow: 1 }}
+                totalCount={subjects?.edges.length ?? 0}
+                itemContent={(index) => {
+                    return (
+                        <ListItem button>
+                            <ListItemText primary={subjects?.edges[index].node?.title ?? 'N/A'} />
+                        </ListItem>
+                    )
+                }}
+                endReached={index => {
+                    // fetchMore({
+                    //     variables: {
+                    //         after: pageInfo?.endCursor,
+                    //         first: 10,
+                    //     }
+                    // })
+                }}
+            >
+            </Virtuoso>
+        </>
+    )
+}
 function InstitutesList(props: { universityQuery?: UniversityQuery }) {
     const university = props.universityQuery?.university
     const institutes = university?.institutes

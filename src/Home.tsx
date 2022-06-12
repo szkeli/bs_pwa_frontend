@@ -1,10 +1,11 @@
-import { Card, CardHeader, Avatar, IconButton, CardContent, Typography, ImageList, ImageListItem, CardActions, Paper } from "@mui/material";
+import { Card, CardHeader,  Avatar, IconButton, CardContent, Typography, ImageList, ImageListItem, CardActions, Paper, SpeedDial } from "@mui/material";
 import { PostsQuery, usePostsQuery } from "./generated/graphql";
 import {
     Favorite as FavoriteIcon,
     FavoriteBorder as FavoriteIconOutlined,
     CommentRounded as CommentIconOutlined,
     MoreVert as MoreVertIcon,
+    Add as AddIcon,
 } from '@mui/icons-material';
 import { Virtuoso } from "react-virtuoso";
 
@@ -73,6 +74,10 @@ export default () => {
 
     return (
         <Paper sx={{backgroundColor: '#eee', flexGrow: 1, height: '100%' }}>
+            <SpeedDial
+                ariaLabel="SpeedDial"
+                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
+                icon={<AddIcon />} />
             <Virtuoso
                 style={{ height: 'calc(100vh - 56px)', flexGrow: 1 }}
                 totalCount={data?.postsWithRelay.edges.length ?? 0}

@@ -2265,6 +2265,8 @@ export type Query = {
   report: Report;
   /** 获取所有的举报 */
   reports: ReportsConnection;
+  /** 获取所有的举报 */
+  reportsWithRelay: ReportsConnectionWithRelay;
   /** 所有的角色 */
   roles: RolesConnection;
   /** 简单的搜索 */
@@ -2665,6 +2667,15 @@ export type QueryReportsArgs = {
 };
 
 
+export type QueryReportsWithRelayArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
 export type QueryRolesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -2915,9 +2926,30 @@ export type Report = Node & {
 
 export type Report2Union = Comment | Post | User;
 
+export type ReportEdge = {
+  __typename?: 'ReportEdge';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<Report>;
+};
+
+export type ReportPageInfo = {
+  __typename?: 'ReportPageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
 export type ReportsConnection = {
   __typename?: 'ReportsConnection';
   nodes: Array<Report>;
+  totalCount: Scalars['Int'];
+};
+
+export type ReportsConnectionWithRelay = {
+  __typename?: 'ReportsConnectionWithRelay';
+  edges: Array<ReportEdge>;
+  pageInfo: ReportPageInfo;
   totalCount: Scalars['Int'];
 };
 
@@ -3196,7 +3228,7 @@ export type University = {
   /** 该大学的所有校区 */
   subcampuses: SubCampusesConnection;
   /** 该大学拥有的所有 Subject */
-  subjects: SubjectsConnection;
+  subjects: SubjectsConnectionWithRelay;
   /** 该大学内的所有 User */
   users: UsersConnectionWithRelay;
 };
@@ -3779,10 +3811,12 @@ export type UniversityQueryVariables = Exact<{
   institutesAfter?: InputMaybe<Scalars['String']>;
   subcampusesFirst?: InputMaybe<Scalars['Int']>;
   subcampusesAfter?: InputMaybe<Scalars['String']>;
+  subjectsFirst?: InputMaybe<Scalars['Int']>;
+  subjectsAfter?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
+export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, users: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null }> }, subjects: { __typename?: 'SubjectsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'SubjectPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> }, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
 
 export type UsersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -3918,11 +3952,42 @@ export type UniversitiesQueryHookResult = ReturnType<typeof useUniversitiesQuery
 export type UniversitiesLazyQueryHookResult = ReturnType<typeof useUniversitiesLazyQuery>;
 export type UniversitiesQueryResult = Apollo.QueryResult<UniversitiesQuery, UniversitiesQueryVariables>;
 export const UniversityDocument = gql`
-    query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String) {
+    query University($id: String!, $institutesFirst: Int, $institutesAfter: String, $subcampusesFirst: Int, $subcampusesAfter: String, $subjectsFirst: Int, $subjectsAfter: String) {
   university(id: $id) {
     id
     name
     logoUrl
+    users {
+      totalCount
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          name
+          avatarImageUrl
+        }
+      }
+    }
+    subjects(first: $subjectsFirst, after: $subjectsAfter) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          title
+        }
+      }
+    }
     institutes(first: $institutesFirst, after: $institutesAfter) {
       totalCount
       pageInfo {
@@ -3974,6 +4039,8 @@ export const UniversityDocument = gql`
  *      institutesAfter: // value for 'institutesAfter'
  *      subcampusesFirst: // value for 'subcampusesFirst'
  *      subcampusesAfter: // value for 'subcampusesAfter'
+ *      subjectsFirst: // value for 'subjectsFirst'
+ *      subjectsAfter: // value for 'subjectsAfter'
  *   },
  * });
  */
