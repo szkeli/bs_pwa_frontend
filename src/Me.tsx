@@ -6,9 +6,10 @@ import {
     ExpandMore as ExpandMoreIcon,
     StarBorder as StarBorderIcon,
     Report as ReportIcon,
-    AutoFixHighRounded as AuthenIcon
+    AutoFixHighRounded as AuthenIcon,
+    ArrowRight as MoreIcon,
 } from "@mui/icons-material"
-import { Avatar, Button, Chip, Collapse, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material"
+import { Avatar, Button, Chip, Collapse, Dialog, DialogTitle, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { client } from "."
@@ -32,8 +33,8 @@ function WhoAmIItem() {
     const user = data?.whoAmI
     const chipLabel = data?.whoAmI.__typename === 'User' ? 'User' : 'Admin'
 
-    if(error) return <></>
-    if(loading) return <></>
+    if (error) return <></>
+    if (loading) return <></>
 
     return (
         <>
@@ -100,9 +101,18 @@ export default () => {
                     <ListItemText primary="设置网络接入点" secondary={selectedValue} />
                 </ListItemButton>
                 <WhoAmIItem />
-                <ListItemButton onClick={() => navigate('/universities', { replace: true })}>
+                <Divider variant="inset" />
+                <ListItem
+                    button
+                    onClick={() => navigate('/universities', { replace: true })}
+                    secondaryAction={
+                        <IconButton>
+                            <MoreIcon />
+                        </IconButton>
+                    }>
                     <ListItemText primary="所有大学" />
-                </ListItemButton>
+                </ListItem>
+                <Divider variant="inset" />
                 <ListItemButton onClick={handleClickAdminPanel}>
                     <ListItemIcon>
                         <AdminPanelSettingsIcon />
