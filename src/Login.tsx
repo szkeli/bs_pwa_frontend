@@ -4,6 +4,7 @@ import { useLoginByUserIdMutation } from "./generated/graphql";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useLoginStatus } from "./hooks";
 import { useNavigate } from "react-router-dom";
+import { client } from ".";
 
 interface SnackbarState {
     type: AlertColor | undefined
@@ -44,6 +45,7 @@ export default () => {
     useEffect(() => {
         if (data && !loading) {
             setLoginState(data.login.token)
+            client.resetStore()
             setOpen(true)
             setSnackbarState({
                 type: 'success',

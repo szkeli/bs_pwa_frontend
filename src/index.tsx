@@ -4,13 +4,12 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
 import '@ionic/react/css/core.css';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter } from 'react-router-dom';
-import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { setContext } from '@apollo/client/link/context';
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -37,8 +36,23 @@ const cache = new InMemoryCache({
 
 const networkUrl = window.localStorage.getItem('network');
 
-export const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: networkUrl ?? "https://api.szlikeyou.com/graphql",
+})
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    }
+  }
+});
+
+export const client = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache,
 })
 
