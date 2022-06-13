@@ -27,7 +27,9 @@ export default () => {
         if (reason === 'clickaway') {
             return;
         }
-        navigate(-1);
+        if(snackbarState.type === 'success') {
+            navigate(-1);
+        }
         setOpen(false);
     };
 
