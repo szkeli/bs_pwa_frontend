@@ -8,10 +8,11 @@ import {
     Report as ReportIcon,
     AutoFixHighRounded as AuthenIcon
 } from "@mui/icons-material"
-import { Avatar, Button, Collapse, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material"
+import { Avatar, Button, Chip, Collapse, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { client } from "."
+import { useWhoAmIQuery } from "./generated/graphql"
 import { useLoginStatus } from "./hooks"
 
 const networks = [
@@ -24,6 +25,35 @@ const networks = [
         tip: '测试网'
     }
 ]
+
+function WhoAmIItem() {
+    const { loading, error, data } = useWhoAmIQuery();
+
+    const user = data?.whoAmI
+    const chipLabel = data?.whoAmI.__typename === 'User' ? 'User' : 'Admin'
+
+    if(error) return <></>
+    if(loading) return <></>
+    
+    return (
+        <>
+            <ListItem>
+                当前登录
+            </ListItem>
+            <ListItemButton>
+                <ListItemAvatar>
+                    <Avatar src={user?.avatarImageUrl ?? ''} />
+                </ListItemAvatar>
+                <ListItemText primary={user?.name ?? 'N/A'} />
+                <Chip
+                    label={chipLabel}
+                    color={chipLabel === 'User' ? 'primary' : 'warning'}
+                    size="small" />
+            </ListItemButton>
+        </>
+
+    )
+}
 
 export default () => {
     const navigate = useNavigate();
@@ -69,6 +99,7 @@ export default () => {
                     </ListItemAvatar>
                     <ListItemText primary="设置网络接入点" secondary={selectedValue} />
                 </ListItemButton>
+                <WhoAmIItem />
                 <ListItemButton onClick={() => navigate('/universities', { replace: true })}>
                     <ListItemText primary="所有大学" />
                 </ListItemButton>

@@ -1,0 +1,20 @@
+query whoAmI {
+    whoAmI {
+        ... on User {
+            id
+            name
+            createdAt
+            lastLoginedAt
+            userId
+            avatarImageUrl
+        }
+        ... on Admin {
+            id
+            name
+            createdAt
+            lastLoginedAt
+            userId
+            avatarImageUrl
+        }
+    }
+}

@@ -73,7 +73,8 @@ function VotesList(props: { postId: string | undefined }) {
                         first: 20
                     }
                 })
-            }} />
+            }}
+        />
     )
 }
 

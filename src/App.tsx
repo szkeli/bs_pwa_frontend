@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { BottomNavigation, BottomNavigationAction, Box, Paper } from '@mui/material';
+import { Badge, BottomNavigation, BottomNavigationAction, Box, Paper } from '@mui/material';
 import {
   Restore as RestoreIcon,
   VerifiedUser as UserIcon,
@@ -19,10 +19,10 @@ import Login from './Login';
 function App() {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  
+
   return (
     <Box sx={{
-      display: 'flex', 
+      display: 'flex',
       flexDirection: 'column',
     }}>
       <Routes>
@@ -43,7 +43,7 @@ function App() {
         </Route>
       </Routes>
       <Routes>
-        <Route path="/userautheninfos" element={<UserAuthenInfos />}/>
+        <Route path="/userautheninfos" element={<UserAuthenInfos />} />
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -53,20 +53,26 @@ function App() {
           showLabels
           value={value}
           onChange={(_event, newValue) => {
-            if(newValue === 3) {
-              navigate('/me', {replace: true})
-            } 
-            if(newValue === 0) {
-              navigate('/', {replace: true})
+            if (newValue === 3) {
+              navigate('/me', { replace: true })
             }
-            if(newValue === 1) {
-              navigate('/users', {replace: true})
+            if (newValue === 0) {
+              navigate('/', { replace: true })
+            }
+            if (newValue === 1) {
+              navigate('/users', { replace: true })
             }
             setValue(newValue);
           }}>
           <BottomNavigationAction label="Recent" icon={<RestoreIcon />} />
           <BottomNavigationAction label="Users" icon={<UsersIcon />} />
-          <BottomNavigationAction label="Messages" icon={<MessagesIcon/>} />
+          <BottomNavigationAction
+            label="Messages"
+            icon={
+              <Badge badgeContent={4} color="primary">
+                <MessagesIcon />
+              </Badge>
+            } />
           <BottomNavigationAction label="Me" icon={<UserIcon />} />
         </BottomNavigation>
       </Paper>
