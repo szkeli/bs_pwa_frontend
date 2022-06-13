@@ -4,10 +4,9 @@ import {
     FavoriteBorder as FavoriteIconOutlined,
     CommentRounded as CommentIconOutlined,
     MoreVert as MoreVertIcon,
-    Add as AddIcon,
 } from '@mui/icons-material';
 import { useState } from "react";
-import { PostVotesQuery, usePostVotesQuery } from "../generated/graphql";
+import { PostVotesQuery, useAddUpvoteOnPostMutation, usePostVotesQuery } from "../generated/graphql";
 import { Virtuoso } from "react-virtuoso";
 
 export interface PostItemProps {
@@ -79,6 +78,7 @@ function VotesList(props: { postId: string | undefined }) {
 }
 
 export default (props: PostItemProps) => {
+    const [addUpvote, { data, loading, error }] = useAddUpvoteOnPostMutation();
     const post = props.post
     const viewerHasUpvoted = post?.votesWithRelay?.viewerHasUpvoted ?? false
     const votesCount = post?.votesWithRelay?.totalCount ?? 0
@@ -142,7 +142,16 @@ export default (props: PostItemProps) => {
                     </ImageList> : <></>
                 }
                 <CardActions disableSpacing>
-                    <IconButton aria-label='add to favorites'>
+                    <IconButton
+                        aria-label='add to favorites'
+                        onClick={() => {
+                            addUpvote({
+                                variables: {
+                                    postId: post?.id ?? ''
+                                }
+                            })
+                        }}
+                    >
                         {viewerHasUpvoted ? (<FavoriteIcon />) : (<FavoriteIconOutlined />)}
                     </IconButton>
                     <Button

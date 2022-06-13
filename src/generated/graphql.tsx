@@ -3789,6 +3789,20 @@ export type WxSubscriptionInfo = {
   unionid: Scalars['String'];
 };
 
+export type AddUpvoteOnPostMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type AddUpvoteOnPostMutation = { __typename?: 'Mutation', addUpvoteOnPost: { __typename?: 'Post', id: string } };
+
+export type AddUpvoteOnCommentMutationVariables = Exact<{
+  commentId: Scalars['String'];
+}>;
+
+
+export type AddUpvoteOnCommentMutation = { __typename?: 'Mutation', addUpvoteOnComment: { __typename?: 'Comment', id: string } };
+
 export type LoginByCodeMutationVariables = Exact<{
   code: Scalars['String'];
 }>;
@@ -3863,6 +3877,72 @@ export type UsersQueryVariables = Exact<{
 export type UsersQuery = { __typename?: 'Query', usersWithRelay: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, createdAt: string, avatarImageUrl?: string | null, credential?: { __typename?: 'ICredential', id: string } | null } | null }> } };
 
 
+export const AddUpvoteOnPostDocument = gql`
+    mutation addUpvoteOnPost($postId: String!) {
+  addUpvoteOnPost(postId: $postId) {
+    id
+  }
+}
+    `;
+export type AddUpvoteOnPostMutationFn = Apollo.MutationFunction<AddUpvoteOnPostMutation, AddUpvoteOnPostMutationVariables>;
+
+/**
+ * __useAddUpvoteOnPostMutation__
+ *
+ * To run a mutation, you first call `useAddUpvoteOnPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddUpvoteOnPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addUpvoteOnPostMutation, { data, loading, error }] = useAddUpvoteOnPostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useAddUpvoteOnPostMutation(baseOptions?: Apollo.MutationHookOptions<AddUpvoteOnPostMutation, AddUpvoteOnPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddUpvoteOnPostMutation, AddUpvoteOnPostMutationVariables>(AddUpvoteOnPostDocument, options);
+      }
+export type AddUpvoteOnPostMutationHookResult = ReturnType<typeof useAddUpvoteOnPostMutation>;
+export type AddUpvoteOnPostMutationResult = Apollo.MutationResult<AddUpvoteOnPostMutation>;
+export type AddUpvoteOnPostMutationOptions = Apollo.BaseMutationOptions<AddUpvoteOnPostMutation, AddUpvoteOnPostMutationVariables>;
+export const AddUpvoteOnCommentDocument = gql`
+    mutation addUpvoteOnComment($commentId: String!) {
+  addUpvoteOnComment(commentId: $commentId) {
+    id
+  }
+}
+    `;
+export type AddUpvoteOnCommentMutationFn = Apollo.MutationFunction<AddUpvoteOnCommentMutation, AddUpvoteOnCommentMutationVariables>;
+
+/**
+ * __useAddUpvoteOnCommentMutation__
+ *
+ * To run a mutation, you first call `useAddUpvoteOnCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddUpvoteOnCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addUpvoteOnCommentMutation, { data, loading, error }] = useAddUpvoteOnCommentMutation({
+ *   variables: {
+ *      commentId: // value for 'commentId'
+ *   },
+ * });
+ */
+export function useAddUpvoteOnCommentMutation(baseOptions?: Apollo.MutationHookOptions<AddUpvoteOnCommentMutation, AddUpvoteOnCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddUpvoteOnCommentMutation, AddUpvoteOnCommentMutationVariables>(AddUpvoteOnCommentDocument, options);
+      }
+export type AddUpvoteOnCommentMutationHookResult = ReturnType<typeof useAddUpvoteOnCommentMutation>;
+export type AddUpvoteOnCommentMutationResult = Apollo.MutationResult<AddUpvoteOnCommentMutation>;
+export type AddUpvoteOnCommentMutationOptions = Apollo.BaseMutationOptions<AddUpvoteOnCommentMutation, AddUpvoteOnCommentMutationVariables>;
 export const LoginByCodeDocument = gql`
     mutation loginByCode($code: String!) {
   loginByCode(code: $code) {

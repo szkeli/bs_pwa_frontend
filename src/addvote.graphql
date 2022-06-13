@@ -1,0 +1,11 @@
+mutation addUpvoteOnPost($postId: String!) {
+  addUpvoteOnPost(postId: $postId) {
+    id
+  }
+}
+
+mutation addUpvoteOnComment($commentId: String!) {
+    addUpvoteOnComment(commentId: $commentId) {
+        id
+    }
+}
