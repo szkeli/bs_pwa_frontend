@@ -111,3 +111,10 @@ $postsFirst: Int, $postsAfter: String,
     }
   }
 }
+
+mutation createUniversity($name: String!, $logoUrl: String!) {
+  createUniversity(name: $name, logoUrl: $logoUrl) {
+    id
+    name
+  }
+}

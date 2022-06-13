@@ -1,10 +1,7 @@
-import { Alert, AlertColor, Button, Snackbar, Stack, TextField } from "@mui/material"
+import LoadingButton from "@mui/lab/LoadingButton";
+import { Alert, Snackbar,AlertColor,  Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react"
-import { useLoginByUserIdMutation } from "./generated/graphql";
-import LoadingButton from '@mui/lab/LoadingButton';
-import { useLoginStatus } from "./hooks";
-import { useNavigate } from "react-router-dom";
-import { client } from ".";
+import { useCreateUniversityMutation } from "./generated/graphql"
 
 interface SnackbarState {
     type: AlertColor | undefined
@@ -12,31 +9,32 @@ interface SnackbarState {
 }
 
 export default () => {
-    const navigate = useNavigate();
-    const { loginState, setLoginState } = useLoginStatus();
-    const [login, { data, loading, error }] = useLoginByUserIdMutation();
-    const [userId, setUserId] = useState('');
-    const [password, setPassword] = useState('');
+    const [createUniversity, { data, loading, error }] = useCreateUniversityMutation()
+    const [name, setName] = useState('');
+    const [logoUrl, setLogoUrl] = useState('');
     const [open, setOpen] = useState(false);
     const [snackbarState, setSnackbarState] = useState<SnackbarState>({
         type: 'error',
         msg: ''
     })
 
+    const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setName(event.target.value);
+    };
+    const handleChangeLogoUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setLogoUrl(event.target.value);
+    };
+
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
-        if(snackbarState.type === 'success') {
-            navigate(-1);
-        }
         setOpen(false);
     };
 
-
     useEffect(() => {
-        if (error && !loading) {
-            setOpen(true)
+        if(error && !loading) {
+            setOpen(true);
             setSnackbarState({
                 type: 'error',
                 msg: error.message
@@ -45,24 +43,14 @@ export default () => {
     }, [error, loading])
 
     useEffect(() => {
-        if (data && !loading) {
-            setLoginState(data.login.token)
-            client.resetStore()
+        if(data && !loading) {
             setOpen(true)
             setSnackbarState({
                 type: 'success',
-                msg: '登录成功'
+                msg: '创建成功'
             })
         }
     }, [data, loading])
-
-    const handleChangeUserId = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserId(event.target.value);
-    };
-
-    const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value)
-    };
 
     return (
         <>
@@ -83,36 +71,33 @@ export default () => {
                 direction="column"
                 justifyContent='center'
                 alignItems='center'
-                height='100vh'>
+                height='100vh'
+            >
                 <TextField
-                    required
-                    id="user-id"
-                    label="UserId"
+                    id="name"
+                    label="学校名字"
                     variant="filled"
-                    value={userId}
-                    onChange={handleChangeUserId} />
+                    value={name}
+                    onChange={handleChangeName} />
                 <TextField
-                    required
-                    id="password"
-                    label="Password"
-                    type="password"
+                    id="name"
+                    label="学校logo"
                     variant="filled"
-                    value={password}
-                    onChange={handleChangePassword} />
+                    value={logoUrl}
+                    onChange={handleChangeLogoUrl} />
                 <LoadingButton
                     size="small"
                     onClick={() => {
-                        login({
+                        createUniversity({
                             variables: {
-                                userId,
-                                sign: password
+                                name, logoUrl
                             }
                         })
                     }}
                     loading={loading}
                     disabled={loading}
                     variant="contained"
-                >登录</LoadingButton>
+                >创建新学校</LoadingButton>
             </Stack>
         </>
     )

@@ -3860,6 +3860,14 @@ export type UniversityQueryVariables = Exact<{
 
 export type UniversityQuery = { __typename?: 'Query', university: { __typename?: 'University', id: string, name: string, logoUrl: string, posts: { __typename?: 'PostsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'PostPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'PostEdge', node?: { __typename?: 'Post', id: string, content: string, createdAt: string, images: Array<string | null>, creator?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } | null, anonymous?: { __typename?: 'Anonymous', id: string, subCampus?: string | null, watermark: string } | null, commentsWithRelay: { __typename?: 'CommentsConnectionWithRelay', totalCount: number }, votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, viewerHasUpvoted: boolean, viewerCanUpvote: boolean } } | null }> }, users: { __typename?: 'UsersConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'UserPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'UserEdge', node?: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null } | null }> }, subjects: { __typename?: 'SubjectsConnectionWithRelay', totalCount: number, pageInfo: { __typename?: 'SubjectPageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> }, institutes: { __typename?: 'InstitutesConnection', totalCount: number, pageInfo: { __typename?: 'InstitutePageInfo', hasNextPage: boolean, startCursor?: string | null, endCursor?: string | null, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> }, subcampuses: { __typename?: 'SubCampusesConnection', totalCount: number, pageInfo: { __typename?: 'SubCampusPageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } } };
 
+export type CreateUniversityMutationVariables = Exact<{
+  name: Scalars['String'];
+  logoUrl: Scalars['String'];
+}>;
+
+
+export type CreateUniversityMutation = { __typename?: 'Mutation', createUniversity: { __typename?: 'University', id: string, name: string } };
+
 export type UserautheninfosQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -4343,6 +4351,41 @@ export function useUniversityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type UniversityQueryHookResult = ReturnType<typeof useUniversityQuery>;
 export type UniversityLazyQueryHookResult = ReturnType<typeof useUniversityLazyQuery>;
 export type UniversityQueryResult = Apollo.QueryResult<UniversityQuery, UniversityQueryVariables>;
+export const CreateUniversityDocument = gql`
+    mutation createUniversity($name: String!, $logoUrl: String!) {
+  createUniversity(name: $name, logoUrl: $logoUrl) {
+    id
+    name
+  }
+}
+    `;
+export type CreateUniversityMutationFn = Apollo.MutationFunction<CreateUniversityMutation, CreateUniversityMutationVariables>;
+
+/**
+ * __useCreateUniversityMutation__
+ *
+ * To run a mutation, you first call `useCreateUniversityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUniversityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUniversityMutation, { data, loading, error }] = useCreateUniversityMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      logoUrl: // value for 'logoUrl'
+ *   },
+ * });
+ */
+export function useCreateUniversityMutation(baseOptions?: Apollo.MutationHookOptions<CreateUniversityMutation, CreateUniversityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUniversityMutation, CreateUniversityMutationVariables>(CreateUniversityDocument, options);
+      }
+export type CreateUniversityMutationHookResult = ReturnType<typeof useCreateUniversityMutation>;
+export type CreateUniversityMutationResult = Apollo.MutationResult<CreateUniversityMutation>;
+export type CreateUniversityMutationOptions = Apollo.BaseMutationOptions<CreateUniversityMutation, CreateUniversityMutationVariables>;
 export const UserautheninfosDocument = gql`
     query userautheninfos($first: Int, $after: String) {
   userAuthenInfos(first: $first, after: $after) {

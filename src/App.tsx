@@ -15,6 +15,7 @@ import Universities from './Universities';
 import University from './University';
 import UserAuthenInfos from './UserAuthenInfos';
 import Login from './Login';
+import CreateUniversity from './CreateUniversity';
 
 function App() {
   const [value, setValue] = useState(0);
@@ -47,6 +48,9 @@ function App() {
       </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
+      </Routes>
+      <Routes>
+        <Route path="/create-university" element={<CreateUniversity />} />
       </Routes>
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation

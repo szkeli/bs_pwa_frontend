@@ -1,7 +1,10 @@
-import { Avatar, Divider, ListItem, ListItemAvatar, ListItemText, Paper } from "@mui/material"
+import { Avatar, Divider, ListItem, ListItemAvatar, ListItemText, Paper, SpeedDial } from "@mui/material"
 import { useNavigate } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso"
 import { UniversitiesQuery, useUniversitiesQuery } from "./generated/graphql"
+import {
+    Add as AddIcon,
+} from '@mui/icons-material';
 
 export default () => {
     const navigate = useNavigate();
@@ -39,6 +42,11 @@ export default () => {
 
     return (
         <Paper sx={{ flexGrow: 1, height: '100%' }}>
+            <SpeedDial
+                ariaLabel="SpeedDial"
+                sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
+                icon={<AddIcon />} 
+                onClick={() => navigate('/create-university')}/>
             <Virtuoso
                 style={{ height: 'calc(100vh - 56px)', flexGrow: 1 }}
                 totalCount={data?.universities.edges.length ?? 0}

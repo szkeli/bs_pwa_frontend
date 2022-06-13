@@ -34,7 +34,7 @@ function WhoAmIItem() {
 
     if(error) return <></>
     if(loading) return <></>
-    
+
     return (
         <>
             <ListItem>
@@ -154,7 +154,6 @@ export default () => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    {/* TODO 清除本地登录状态 重新加载页面 */}
                     <Button
                         color="error"
                         variant="contained"
