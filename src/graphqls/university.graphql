@@ -118,3 +118,7 @@ mutation createUniversity($name: String!, $logoUrl: String!) {
     name
   }
 }
+
+mutation deleteUniversity($id: String!) {
+  deleteUniversity(id: $id)
+}

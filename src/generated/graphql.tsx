@@ -3868,6 +3868,13 @@ export type CreateUniversityMutationVariables = Exact<{
 
 export type CreateUniversityMutation = { __typename?: 'Mutation', createUniversity: { __typename?: 'University', id: string, name: string } };
 
+export type DeleteUniversityMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteUniversityMutation = { __typename?: 'Mutation', deleteUniversity: boolean };
+
 export type UserautheninfosQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -4386,6 +4393,37 @@ export function useCreateUniversityMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateUniversityMutationHookResult = ReturnType<typeof useCreateUniversityMutation>;
 export type CreateUniversityMutationResult = Apollo.MutationResult<CreateUniversityMutation>;
 export type CreateUniversityMutationOptions = Apollo.BaseMutationOptions<CreateUniversityMutation, CreateUniversityMutationVariables>;
+export const DeleteUniversityDocument = gql`
+    mutation deleteUniversity($id: String!) {
+  deleteUniversity(id: $id)
+}
+    `;
+export type DeleteUniversityMutationFn = Apollo.MutationFunction<DeleteUniversityMutation, DeleteUniversityMutationVariables>;
+
+/**
+ * __useDeleteUniversityMutation__
+ *
+ * To run a mutation, you first call `useDeleteUniversityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUniversityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUniversityMutation, { data, loading, error }] = useDeleteUniversityMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteUniversityMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUniversityMutation, DeleteUniversityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUniversityMutation, DeleteUniversityMutationVariables>(DeleteUniversityDocument, options);
+      }
+export type DeleteUniversityMutationHookResult = ReturnType<typeof useDeleteUniversityMutation>;
+export type DeleteUniversityMutationResult = Apollo.MutationResult<DeleteUniversityMutation>;
+export type DeleteUniversityMutationOptions = Apollo.BaseMutationOptions<DeleteUniversityMutation, DeleteUniversityMutationVariables>;
 export const UserautheninfosDocument = gql`
     query userautheninfos($first: Int, $after: String) {
   userAuthenInfos(first: $first, after: $after) {
