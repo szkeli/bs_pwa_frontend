@@ -11,6 +11,7 @@ import {
 import { Avatar, Button, Collapse, Dialog, DialogTitle, List, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { client } from "."
 import { useLoginStatus } from "./hooks"
 
 const networks = [
@@ -26,7 +27,7 @@ const networks = [
 
 export default () => {
     const navigate = useNavigate();
-    const loginState = useLoginStatus();
+    const { loginState, setLoginState, removeLoginState } = useLoginStatus();
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(() => {
         const v = localStorage.getItem('network');
@@ -52,6 +53,10 @@ export default () => {
     useEffect(() => {
         window.localStorage.setItem("network", selectedValue)
     }, [selectedValue])
+
+    const handleLogout = () => {
+        removeLoginState();
+    }
 
     return (
         <>
@@ -98,7 +103,7 @@ export default () => {
                 open={open}
                 onClose={handleClose}
             />
-            {!loginState ? (
+            {!loginState ?
                 <Stack
                     spacing={2}
                     direction="row"
@@ -112,7 +117,22 @@ export default () => {
                         }}
                     >登录</Button>
                 </Stack>
-            ) : (<></>)}
+                : <Stack
+                    spacing={2}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    {/* TODO 清除本地登录状态 重新加载页面 */}
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={() => {
+                            handleLogout()
+                            client.resetStore()
+                        }}
+                    >退出登录</Button>
+                </Stack>}
         </>
     )
 }

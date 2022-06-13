@@ -2,6 +2,8 @@ import { Alert, AlertColor, Button, Snackbar, Stack, TextField } from "@mui/mate
 import React, { useEffect, useState } from "react"
 import { useLoginByUserIdMutation } from "./generated/graphql";
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useLoginStatus } from "./hooks";
+import { useNavigate } from "react-router-dom";
 
 interface SnackbarState {
     type: AlertColor | undefined
@@ -9,6 +11,8 @@ interface SnackbarState {
 }
 
 export default () => {
+    const navigate = useNavigate();
+    const { loginState, setLoginState } = useLoginStatus();
     const [login, { data, loading, error }] = useLoginByUserIdMutation();
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
@@ -22,6 +26,7 @@ export default () => {
         if (reason === 'clickaway') {
             return;
         }
+        navigate(-1);
         setOpen(false);
     };
 
@@ -38,7 +43,7 @@ export default () => {
 
     useEffect(() => {
         if (data && !loading) {
-            localStorage.setItem('token', data.login.token)
+            setLoginState(data.login.token)
             setOpen(true)
             setSnackbarState({
                 type: 'success',
