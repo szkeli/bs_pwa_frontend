@@ -35,3 +35,10 @@ query Posts($first: Int, $after: String) {
         }
     }
 }
+
+mutation CreatePost($content: String!, $images: [String!], $subjectId: String, $universityId: String!, $isAnonymous: Boolean) {
+  createPost(content: $content, images: $images, subjectId: $subjectId, universityId: $universityId, isAnonymous: $isAnonymous) {
+    id
+    content
+  }
+}
