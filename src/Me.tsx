@@ -1,10 +1,8 @@
 import {
     NetworkCell as NetworkIcon,
-    NetworkLocked as NetworkItemIcon,
     AdminPanelSettings as AdminPanelSettingsIcon,
     ExpandLess as ExpandLessIcon,
     ExpandMore as ExpandMoreIcon,
-    StarBorder as StarBorderIcon,
     Report as ReportIcon,
     AutoFixHighRounded as AuthenIcon,
     ArrowRight as MoreIcon,
@@ -28,10 +26,18 @@ const networks = [
 ]
 
 function WhoAmIItem() {
+    const { loginState, removeLoginState } = useLoginStatus();
     const { loading, error, data } = useWhoAmIQuery();
 
+    console.error({error ,loginState, loading})
     const user = data?.whoAmI
     const chipLabel = data?.whoAmI.__typename === 'User' ? 'User' : 'Admin'
+
+    useEffect(() => {
+        if(!loading && error && loginState) {
+            removeLoginState()
+        }
+    }, [loginState, error, loading, removeLoginState])
 
     if (error) return <></>
     if (loading) return <></>
@@ -56,13 +62,12 @@ function WhoAmIItem() {
     )
 }
 
-export default () => {
+export default function Me() {
     const navigate = useNavigate();
-    const { loginState, setLoginState, removeLoginState } = useLoginStatus();
+    const { loginState, removeLoginState } = useLoginStatus();
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState(() => {
         const v = localStorage.getItem('network');
-
         return v ?? networks[0].url
     });
 
