@@ -63,7 +63,7 @@ function MDeleteIcon(props: { universityId: string | undefined }) {
     )
 }
 
-export default () => {
+export default function Universities() {
     const navigate = useNavigate();
     const { loading, error, data, fetchMore } = useUniversitiesQuery({
         variables: {

@@ -3886,6 +3886,13 @@ export type DeleteUniversityMutationVariables = Exact<{
 
 export type DeleteUniversityMutation = { __typename?: 'Mutation', deleteUniversity: boolean };
 
+export type UserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, gender?: Gender | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null, university?: { __typename?: 'University', id: string, name: string } | null, institutes?: { __typename?: 'InstitutesConnection', edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> } | null, subCampuses?: { __typename?: 'SubCampusesConnection', edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } | null } };
+
 export type UserautheninfosQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -4479,6 +4486,68 @@ export function useDeleteUniversityMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteUniversityMutationHookResult = ReturnType<typeof useDeleteUniversityMutation>;
 export type DeleteUniversityMutationResult = Apollo.MutationResult<DeleteUniversityMutation>;
 export type DeleteUniversityMutationOptions = Apollo.BaseMutationOptions<DeleteUniversityMutation, DeleteUniversityMutationVariables>;
+export const UserDocument = gql`
+    query User($id: String!) {
+  user(id: $id) {
+    id
+    name
+    avatarImageUrl
+    gender
+    createdAt
+    credential {
+      id
+    }
+    university {
+      id
+      name
+    }
+    institutes {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+    subCampuses {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const UserautheninfosDocument = gql`
     query userautheninfos($first: Int, $after: String) {
   userAuthenInfos(first: $first, after: $after) {

@@ -1,0 +1,32 @@
+query User ($id: String!) {
+    user(id: $id) {
+        id
+        name
+        avatarImageUrl
+        gender
+        createdAt
+        credential {
+            id
+        }
+        university {
+            id
+            name
+        }
+        institutes {
+            edges {
+                node {
+                    id
+                    name
+                }
+            }
+        }
+        subCampuses {
+            edges {
+                node {
+                    id
+                    name
+                }
+            }
+        }
+    }
+}

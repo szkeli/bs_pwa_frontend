@@ -11,6 +11,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './Home';
 import Me from './Me';
 import Users from './Users';
+import User from './User';
 import Universities from './Universities';
 import University from './University';
 import UserAuthenInfos from './UserAuthenInfos';
@@ -41,6 +42,11 @@ function App() {
       <Routes>
         <Route path="/university">
           <Route path=":id" element={<University />} />
+        </Route>
+      </Routes>
+      <Routes>
+        <Route path="/user">
+          <Route path=":id" element={<User />} />
         </Route>
       </Routes>
       <Routes>

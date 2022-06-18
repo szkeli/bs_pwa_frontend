@@ -14,17 +14,18 @@ import { Virtuoso } from "react-virtuoso";
 import UserItem from "./components/UserItem";
 import PostItem from "./components/PostItem";
 
-export default () => {
+export default function University() {
     let { id } = useParams();
-    if (!id) return <div>Error</div>
 
     const res = useUniversityQuery({
         variables: {
-            id,
+            id: id ?? '',
         }
     })
 
-    const { loading, error, data } = res
+    if (!id) return <div>Error</div>
+
+    const { loading, error } = res
 
     if (error) return <div>Something gone error...</div>
     if (loading) return <div>Loading...</div>
