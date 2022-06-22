@@ -3891,7 +3891,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, gender?: Gender | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null, university?: { __typename?: 'University', id: string, name: string } | null, institutes?: { __typename?: 'InstitutesConnection', edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> } | null, subCampuses?: { __typename?: 'SubCampusesConnection', edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } | null } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, gender?: Gender | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null, postsWithRelay: { __typename?: 'PostsConnectionWithRelay', totalCount: number }, university?: { __typename?: 'University', id: string, name: string } | null, institutes?: { __typename?: 'InstitutesConnection', edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string } | null }> } | null, subCampuses?: { __typename?: 'SubCampusesConnection', edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } | null } };
 
 export type UserautheninfosQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -4496,6 +4496,9 @@ export const UserDocument = gql`
     createdAt
     credential {
       id
+    }
+    postsWithRelay {
+      totalCount
     }
     university {
       id

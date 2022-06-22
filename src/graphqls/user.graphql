@@ -8,6 +8,9 @@ query User ($id: String!) {
         credential {
             id
         }
+        postsWithRelay {
+            totalCount
+        }
         university {
             id
             name
