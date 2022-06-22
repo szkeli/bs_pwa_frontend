@@ -38,7 +38,7 @@ function Header(props: { userQueryHookResult?: UserQueryHookResult }) {
   const user = props.userQueryHookResult?.data?.user;
   const label = `${user?.postsWithRelay.totalCount ?? 0}条帖子`;
   const universityLogo = user?.university?.logoUrl ?? "universityLogo";
-  const institutes = user?.institutes?.edges.map(i => i.node);
+  const institutes = user?.institutes?.edges.map((i) => i.node);
 
   return (
     <Card>
@@ -57,14 +57,21 @@ function Header(props: { userQueryHookResult?: UserQueryHookResult }) {
         <ListItemText primary={user?.name} secondary={label} />
       </ListItem>
       <CardContent>
-        <Chip
-          avatar={<Avatar alt={user?.name ?? "avatar"} src={universityLogo} />}
-          label={user?.university?.name}
-        />
-        {institutes?.map(i => (
-            <Chip
-                avatar={<Avatar alt={i?.name} src={i?.logoUrl} />}
-            label={i?.name} />
+        {user?.university ? (
+          <Chip
+            avatar={
+              <Avatar alt={user?.name ?? "avatar"} src={universityLogo} />
+            }
+            label={user?.university?.name}
+          />
+        ) : (
+          <></>
+        )}
+        {institutes?.map((i) => (
+          <Chip
+            avatar={<Avatar alt={i?.name} src={i?.logoUrl} />}
+            label={i?.name}
+          />
         ))}
       </CardContent>
     </Card>

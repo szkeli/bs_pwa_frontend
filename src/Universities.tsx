@@ -65,7 +65,7 @@ function MDeleteIcon(props: { universityId: string | undefined }) {
 
 export default function Universities() {
     const navigate = useNavigate();
-    const { loading, error, data, fetchMore } = useUniversitiesQuery({
+    const { loading, data, fetchMore } = useUniversitiesQuery({
         variables: {
             first: 20,
         }
