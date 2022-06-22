@@ -59,6 +59,7 @@ export interface PostItemProps {
 }
 
 function VotesList(props: { postId: string | undefined }) {
+  const navigate = useNavigate();
   const { data, loading, error, fetchMore } = usePostVotesQuery({
     variables: {
       id: props.postId ?? "",
@@ -80,7 +81,11 @@ function VotesList(props: { postId: string | undefined }) {
     const creator = edges[index].node?.creator;
 
     return (
-      <ListItem button>
+      <ListItem 
+        button
+        onClick={() => {
+          navigate(`/user/${creator?.id}`);
+        }}>
         <ListItemAvatar>
           <Avatar alt="avatar" src={creator?.avatarImageUrl ?? "N/A"} />
         </ListItemAvatar>
