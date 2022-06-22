@@ -14,12 +14,14 @@ query User ($id: String!) {
         university {
             id
             name
+            logoUrl
         }
         institutes {
             edges {
                 node {
                     id
                     name
+                    logoUrl
                 }
             }
         }
