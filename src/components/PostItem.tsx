@@ -201,7 +201,7 @@ export default function PostItem(props: PostItemProps) {
           <IconButton aria-label="add comments">
             <CommentIconOutlined />
           </IconButton>
-          {commentsCount}评论
+          {commentsCount}条评论
         </CardActions>
       </Card>
     </>
