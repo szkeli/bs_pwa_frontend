@@ -1,37 +1,76 @@
-query User ($id: String!) {
-    user(id: $id) {
-        id
-        name
-        avatarImageUrl
-        gender
-        createdAt
-        credential {
-            id
-        }
-        postsWithRelay {
-            totalCount
-        }
-        university {
-            id
-            name
-            logoUrl
-        }
-        institutes {
-            edges {
-                node {
-                    id
-                    name
-                    logoUrl
-                }
+query User($id: String!) {
+  user(id: $id) {
+    id
+    name
+    avatarImageUrl
+    gender
+    createdAt
+    credential {
+      id
+    }
+    postsWithRelay(first: 1) {
+      totalCount
+    }
+    votesWithRelay(first: 1) {
+      totalCount
+      edges {
+        node {
+          id
+          createdAt
+          to {
+            ... on Post {
+                id
+                content
             }
+            ... on Comment {
+                id
+                content
+            }
+          }
         }
-        subCampuses {
-            edges {
-                node {
-                    id
-                    name
+      }
+    }
+    commentsWithRelay(first: 1) {
+        totalCount
+        edges {
+            node {
+                id
+                content
+                createdAt
+                to {
+                    ... on Post {
+                        id
+                        content
+                    }
+                    ... on Comment {
+                        id
+                        content
+                    }
                 }
             }
         }
     }
+    university {
+      id
+      name
+      logoUrl
+    }
+    institutes {
+      edges {
+        node {
+          id
+          name
+          logoUrl
+        }
+      }
+    }
+    subCampuses {
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+  }
 }

@@ -3999,7 +3999,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, gender?: Gender | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null, postsWithRelay: { __typename?: 'PostsConnectionWithRelay', totalCount: number }, university?: { __typename?: 'University', id: string, name: string, logoUrl: string } | null, institutes?: { __typename?: 'InstitutesConnection', edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string, logoUrl: string } | null }> } | null, subCampuses?: { __typename?: 'SubCampusesConnection', edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } | null } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null, gender?: Gender | null, createdAt: string, credential?: { __typename?: 'ICredential', id: string } | null, postsWithRelay: { __typename?: 'PostsConnectionWithRelay', totalCount: number }, votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, edges?: Array<{ __typename?: 'VoteEdge', node?: { __typename?: 'Vote', id: string, createdAt: string, to: { __typename?: 'Comment', id: string, content: string } | { __typename?: 'Post', id: string, content: string } } | null }> | null }, commentsWithRelay: { __typename?: 'CommentsConnectionWithRelay', totalCount: number, edges: Array<{ __typename?: 'CommentEdge', node?: { __typename?: 'Comment', id: string, content: string, createdAt: string, to: { __typename?: 'Anonymous' } | { __typename?: 'Comment', id: string, content: string } | { __typename?: 'Post', id: string, content: string } | { __typename?: 'User' } } | null }> }, university?: { __typename?: 'University', id: string, name: string, logoUrl: string } | null, institutes?: { __typename?: 'InstitutesConnection', edges: Array<{ __typename?: 'InstituteEdge', node?: { __typename?: 'Institute', id: string, name: string, logoUrl: string } | null }> } | null, subCampuses?: { __typename?: 'SubCampusesConnection', edges: Array<{ __typename?: 'SubCampusEdge', node?: { __typename?: 'SubCampus', id: string, name: string } | null }> } | null } };
 
 export type UserautheninfosQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -4691,8 +4691,47 @@ export const UserDocument = gql`
     credential {
       id
     }
-    postsWithRelay {
+    postsWithRelay(first: 1) {
       totalCount
+    }
+    votesWithRelay(first: 1) {
+      totalCount
+      edges {
+        node {
+          id
+          createdAt
+          to {
+            ... on Post {
+              id
+              content
+            }
+            ... on Comment {
+              id
+              content
+            }
+          }
+        }
+      }
+    }
+    commentsWithRelay(first: 1) {
+      totalCount
+      edges {
+        node {
+          id
+          content
+          createdAt
+          to {
+            ... on Post {
+              id
+              content
+            }
+            ... on Comment {
+              id
+              content
+            }
+          }
+        }
+      }
     }
     university {
       id

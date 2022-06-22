@@ -143,7 +143,7 @@ export default function PostItem(props: PostItemProps) {
   const viewerHasUpvoted = post?.votesWithRelay?.viewerHasUpvoted ?? false;
   const votesCount = post?.votesWithRelay?.totalCount ?? 0;
   const commentsCount = post?.commentsWithRelay?.totalCount ?? 0;
-  const creatorName = post?.creator?.name ?? "Anonymouse";
+  const creatorName = post?.creator?.name ?? "Anonymous";
   const createdAt = post?.createdAt;
   const content = post?.content;
   const images = post?.images;
