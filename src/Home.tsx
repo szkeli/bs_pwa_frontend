@@ -5,8 +5,10 @@ import {
 } from '@mui/icons-material';
 import { Virtuoso } from "react-virtuoso";
 import PostItem from "./components/PostItem";
+import { useNavigate } from "react-router-dom";
 
-export default () => {
+export default function Home() {
+    const navigate = useNavigate();
     const { loading, error, data, fetchMore } = usePostsQuery();
     
     if (loading) return <div> Loading... </div>
@@ -22,6 +24,9 @@ export default () => {
     return (
         <Paper sx={{backgroundColor: '#eee', flexGrow: 1, height: '100%' }}>
             <SpeedDial
+                onClick={ () => {
+                    navigate('/create-post')
+                }}
                 ariaLabel="SpeedDial"
                 sx={{ position: 'fixed', bottom: 'calc(56px + 16px)', right: 16 }}
                 icon={<AddIcon />} />
