@@ -32,6 +32,7 @@ import {
 import { Virtuoso } from "react-virtuoso";
 import { Container } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 export interface PostItemProps {
   post?: {
@@ -172,7 +173,7 @@ export default function PostItem(props: PostItemProps) {
         <CardHeader
           avatar={<MAvatar post={props.post} />}
           title={creatorName}
-          subheader={createdAt}
+          subheader={moment(createdAt).calendar()}
           action={
             <IconButton aria-label="settings">
               <MoreVertIcon />

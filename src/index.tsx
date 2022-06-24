@@ -10,6 +10,10 @@ import { relayStylePagination } from '@apollo/client/utilities';
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
+import moment from "moment";
+import 'moment/locale/zh-cn'
+
+moment.locale("zh-cn");
 
 const cache = new InMemoryCache({
   typePolicies: {
