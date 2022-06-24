@@ -122,3 +122,10 @@ mutation createUniversity($name: String!, $logoUrl: String!) {
 mutation deleteUniversity($id: String!) {
   deleteUniversity(id: $id)
 }
+
+mutation updateUniversity($id: String!, $logoUrl: String, $name: String) {
+  updateUniversity(id: $id, name: $name, logoUrl: $logoUrl) {
+    id
+    name
+  }
+}

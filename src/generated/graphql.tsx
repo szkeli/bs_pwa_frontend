@@ -3985,6 +3985,15 @@ export type DeleteUniversityMutationVariables = Exact<{
 
 export type DeleteUniversityMutation = { __typename?: 'Mutation', deleteUniversity: boolean };
 
+export type UpdateUniversityMutationVariables = Exact<{
+  id: Scalars['String'];
+  logoUrl?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UpdateUniversityMutation = { __typename?: 'Mutation', updateUniversity: { __typename?: 'University', id: string, name: string } };
+
 export type UserQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -4635,6 +4644,42 @@ export function useDeleteUniversityMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteUniversityMutationHookResult = ReturnType<typeof useDeleteUniversityMutation>;
 export type DeleteUniversityMutationResult = Apollo.MutationResult<DeleteUniversityMutation>;
 export type DeleteUniversityMutationOptions = Apollo.BaseMutationOptions<DeleteUniversityMutation, DeleteUniversityMutationVariables>;
+export const UpdateUniversityDocument = gql`
+    mutation updateUniversity($id: String!, $logoUrl: String, $name: String) {
+  updateUniversity(id: $id, name: $name, logoUrl: $logoUrl) {
+    id
+    name
+  }
+}
+    `;
+export type UpdateUniversityMutationFn = Apollo.MutationFunction<UpdateUniversityMutation, UpdateUniversityMutationVariables>;
+
+/**
+ * __useUpdateUniversityMutation__
+ *
+ * To run a mutation, you first call `useUpdateUniversityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUniversityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUniversityMutation, { data, loading, error }] = useUpdateUniversityMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      logoUrl: // value for 'logoUrl'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateUniversityMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUniversityMutation, UpdateUniversityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUniversityMutation, UpdateUniversityMutationVariables>(UpdateUniversityDocument, options);
+      }
+export type UpdateUniversityMutationHookResult = ReturnType<typeof useUpdateUniversityMutation>;
+export type UpdateUniversityMutationResult = Apollo.MutationResult<UpdateUniversityMutation>;
+export type UpdateUniversityMutationOptions = Apollo.BaseMutationOptions<UpdateUniversityMutation, UpdateUniversityMutationVariables>;
 export const UserDocument = gql`
     query User($id: String!) {
   user(id: $id) {

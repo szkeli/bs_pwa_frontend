@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UniversityQueryHookResult, useUniversityQuery } from "./generated/graphql";
 import { Edit as EditIcon, Add as AddIcon } from '@mui/icons-material';
 import { Virtuoso } from "react-virtuoso";
@@ -39,11 +39,14 @@ export default function University() {
 }
 
 function Header(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
+    const navigate = useNavigate();
     const university = props.universityQueryHookResult?.data?.university
 
     return (
         <ListItem secondaryAction={
-            <IconButton>
+            <IconButton onClick={() => {
+                navigate(`/edit-university/${university?.id}`)
+            }}>
                 <EditIcon />
             </IconButton>
         }>
@@ -102,9 +105,7 @@ function MTabs(props: { universityQueryHookResult?: UniversityQueryHookResult })
             <TabPanel value={value} index={4}>
                 <UsersList universityQueryHookResult={props.universityQueryHookResult} />
             </TabPanel>
-
         </Box>
-
     )
 }
 
@@ -168,7 +169,6 @@ function UsersList(props: { universityQueryHookResult?: UniversityQueryHookResul
         </>
     )
 }
-
 function SubjectsList(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
     const university = props.universityQueryHookResult?.data?.university
     const subjects = university?.subjects
@@ -235,7 +235,6 @@ function InstitutesList(props: { universityQueryHookResult?: UniversityQueryHook
         </>
     )
 }
-
 function SubCampusesList(props: { universityQueryHookResult?: UniversityQueryHookResult }) {
     const university = props.universityQueryHookResult?.data?.university
     const subCampuses = university?.subcampuses

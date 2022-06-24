@@ -18,6 +18,7 @@ import UserAuthenInfos from './UserAuthenInfos';
 import Login from './Login';
 import CreateUniversity from './CreateUniversity';
 import CreatePost from './CreatePost';
+import EditUniversity from './EditUniversity';
 
 function App() {
   const [value, setValue] = useState(0);
@@ -62,6 +63,12 @@ function App() {
       <Routes>
         <Route path="/create-post" element={<CreatePost />} />
       </Routes>
+      <Routes>
+        <Route path="/edit-university">
+          <Route path=":id" element={<EditUniversity />} />
+        </Route>
+      </Routes>
+
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation
           showLabels

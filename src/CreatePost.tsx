@@ -21,14 +21,13 @@ import {
 export default function CreatePost() {
   const {
     data: UniversitiesData,
-    error: UniversitiesError,
     loading: UniversitiesLoading,
   } = useUniversitiesQuery();
   const [
     fetchSubjects,
-    { data: SubjectsData, error: SubjectsError, loading: SubjectsLoading },
+    { data: SubjectsData, },
   ] = useSubjectsLazyQuery();
-  const [createPost, { data, error, loading }] = useCreatePostMutation();
+  const [createPost] = useCreatePostMutation();
   const [universityId, setUniversityId] = useState("");
   const [subjectId, setSubjectId] = useState<string>();
   const [content, setContent] = useState("");

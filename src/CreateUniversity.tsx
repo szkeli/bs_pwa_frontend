@@ -8,7 +8,7 @@ interface SnackbarState {
     msg: string
 }
 
-export default () => {
+export default function CreateUniversity() {
     const [createUniversity, { data, loading, error }] = useCreateUniversityMutation()
     const [name, setName] = useState('');
     const [logoUrl, setLogoUrl] = useState('');
