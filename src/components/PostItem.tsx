@@ -12,11 +12,10 @@ import {
   DialogTitle,
   Button,
   DialogContent,
-  List,
   ListItemText,
   ListItem,
   ListItemAvatar,
-  Box,
+  Chip,
 } from "@mui/material";
 import {
   Favorite as FavoriteIcon,
@@ -55,6 +54,16 @@ export interface PostItemProps {
     commentsWithRelay: {
       totalCount?: number | null | undefined;
     };
+    university?: {
+      id: string;
+      name: string;
+      logoUrl: string;
+    } | null;
+    subject?: {
+      id: string;
+      title: string;
+      avatarImageUrl: string;
+    } | null;
   } | null;
 }
 
@@ -81,11 +90,12 @@ function VotesList(props: { postId: string | undefined }) {
     const creator = edges[index].node?.creator;
 
     return (
-      <ListItem 
+      <ListItem
         button
         onClick={() => {
           navigate(`/user/${creator?.id}`);
-        }}>
+        }}
+      >
         <ListItemAvatar>
           <Avatar alt="avatar" src={creator?.avatarImageUrl ?? "N/A"} />
         </ListItemAvatar>
@@ -126,7 +136,7 @@ function MAvatar(props: PostItemProps) {
 }
 
 export default function PostItem(props: PostItemProps) {
-  const [addUpvote, { data, loading, error }] = useAddUpvoteOnPostMutation();
+  const [addUpvote] = useAddUpvoteOnPostMutation();
   const post = props.post;
   const viewerHasUpvoted = post?.votesWithRelay?.viewerHasUpvoted ?? false;
   const votesCount = post?.votesWithRelay?.totalCount ?? 0;
@@ -135,6 +145,8 @@ export default function PostItem(props: PostItemProps) {
   const createdAt = post?.createdAt;
   const content = post?.content;
   const images = post?.images;
+  const university = post?.university;
+  const subject = post?.subject;
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
@@ -187,6 +199,27 @@ export default function PostItem(props: PostItemProps) {
         ) : (
           <></>
         )}
+        <CardContent>
+          <Chip
+            avatar={
+              <Avatar alt={university?.name ?? ""} src={university?.logoUrl} />
+            }
+            label={university?.name ?? "N/A"}
+          />
+          {subject ? (
+            <Chip
+              avatar={
+                <Avatar
+                  alt={subject?.title ?? ""}
+                  src={subject?.avatarImageUrl}
+                />
+              }
+              label={subject?.title ?? "N/A"}
+            />
+          ) : (
+            <></>
+          )}
+        </CardContent>
         <CardActions disableSpacing>
           <IconButton
             aria-label="add to favorites"

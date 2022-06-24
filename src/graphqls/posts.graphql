@@ -31,6 +31,16 @@ query Posts($first: Int, $after: String) {
                     viewerCanUpvote
                     viewerHasUpvoted
                 }
+                university {
+                    id
+                    name
+                    logoUrl
+                }
+                subject {
+                    id
+                    title
+                    avatarImageUrl
+                }
             }
         }
     }
