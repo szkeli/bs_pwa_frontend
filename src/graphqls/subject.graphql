@@ -1,0 +1,10 @@
+query Subjects($universityId: String) {
+    subjectsWithRelay(universityId: $universityId) {
+        edges {
+            node {
+                id
+                title
+            }
+        }
+    }
+}

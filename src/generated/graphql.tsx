@@ -484,6 +484,46 @@ export type DeletesConnection = {
   totalCount: Scalars['Int'];
 };
 
+export type Experience = {
+  __typename?: 'Experience';
+  createdAt: Scalars['String'];
+  from?: Maybe<User>;
+  id: Scalars['String'];
+  points: Scalars['Int'];
+  to: User;
+  transactionType: ExperienceTransactionType;
+};
+
+export type ExperienceEdge = {
+  __typename?: 'ExperienceEdge';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<Experience>;
+};
+
+export type ExperiencePageInfo = {
+  __typename?: 'ExperiencePageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
+export enum ExperienceTransactionType {
+  /** 无条件烧毁 */
+  Burn = 'BURN',
+  /** 每日登录的奖励 */
+  DailyCheckIn = 'DAILY_CHECK_IN',
+  /** 无条件铸造 */
+  Mint = 'MINT'
+}
+
+export type ExperiencesConnection = {
+  __typename?: 'ExperiencesConnection';
+  edges: Array<ExperienceEdge>;
+  pageInfo: ExperiencePageInfo;
+  totalCount: Scalars['Int'];
+};
+
 export type Fold = {
   __typename?: 'Fold';
   createdAt: Scalars['String'];
@@ -815,6 +855,9 @@ export type LoginResult = Node & Person & {
   credential?: Maybe<ICredential>;
   /** 当前用户的deadlines */
   deadlines: DeadlinesConnection;
+  experiencePointTransactions: ExperiencesConnection;
+  /** 当前用户的经验 */
+  experiencePoints?: Maybe<Scalars['Int']>;
   /** 用户性别 */
   gender?: Maybe<Gender>;
   /** 年级 */
@@ -902,6 +945,15 @@ export type LoginResultConversationsArgs = {
 
 
 export type LoginResultDeadlinesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type LoginResultExperiencePointTransactionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -1157,6 +1209,8 @@ export type Mutation = {
   /** 创建一个主题 */
   createSubject: Subject;
   createUniversity: University;
+  /** 每日签到 */
+  dailyCheckIn: Experience;
   /** 管理员或用户删除一个评论 */
   deleteComment: Delete;
   deleteInstitute: Scalars['Boolean'];
@@ -1772,6 +1826,7 @@ export type Person = {
   credential?: Maybe<ICredential>;
   /** 当前用户的deadlines */
   deadlines: DeadlinesConnection;
+  experiencePointTransactions: ExperiencesConnection;
   /** 当前用户的性别 */
   gender?: Maybe<Gender>;
   id: Scalars['String'];
@@ -1833,6 +1888,15 @@ export type PersonConversationsArgs = {
 
 
 export type PersonDeadlinesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type PersonExperiencePointTransactionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2200,6 +2264,8 @@ export type Query = {
   deletedPosts: PostsConnection;
   /** 获取所有的删除 */
   deletes: DeletesConnection;
+  experiencePointsTransaction: Experience;
+  experiencePointsTransactions: ExperiencesConnection;
   /** 根据评论获取原帖子 */
   findOriginPostByCommentId: Post;
   /** 获取所有的折叠 */
@@ -2439,6 +2505,20 @@ export type QueryDeletedPostsArgs = {
 
 
 export type QueryDeletesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type QueryExperiencePointsTransactionArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryExperiencePointsTransactionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -3334,6 +3414,9 @@ export type User = Node & Person & {
   credential?: Maybe<ICredential>;
   /** 当前用户的deadlines */
   deadlines: DeadlinesConnection;
+  experiencePointTransactions: ExperiencesConnection;
+  /** 当前用户的经验 */
+  experiencePoints?: Maybe<Scalars['Int']>;
   /** 用户性别 */
   gender?: Maybe<Gender>;
   /** 年级 */
@@ -3420,6 +3503,15 @@ export type UserConversationsArgs = {
 
 
 export type UserDeadlinesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Order_By>;
+};
+
+
+export type UserExperiencePointTransactionsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
@@ -3846,6 +3938,13 @@ export type PostVotesQueryVariables = Exact<{
 
 export type PostVotesQuery = { __typename?: 'Query', post: { __typename?: 'Post', votesWithRelay: { __typename?: 'VotesConnectionWithRelay', totalCount?: number | null, pageInfo?: { __typename?: 'VotePageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'VoteEdge', node?: { __typename?: 'Vote', id: string, creator: { __typename?: 'User', id: string, name: string, avatarImageUrl?: string | null } } | null }> | null } } };
 
+export type SubjectsQueryVariables = Exact<{
+  universityId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SubjectsQuery = { __typename?: 'Query', subjectsWithRelay: { __typename?: 'SubjectsConnectionWithRelay', edges: Array<{ __typename?: 'SubjectEdge', node?: { __typename?: 'Subject', id: string, title: string } | null }> } };
+
 export type UniversitiesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -4217,6 +4316,46 @@ export function usePostVotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type PostVotesQueryHookResult = ReturnType<typeof usePostVotesQuery>;
 export type PostVotesLazyQueryHookResult = ReturnType<typeof usePostVotesLazyQuery>;
 export type PostVotesQueryResult = Apollo.QueryResult<PostVotesQuery, PostVotesQueryVariables>;
+export const SubjectsDocument = gql`
+    query Subjects($universityId: String) {
+  subjectsWithRelay(universityId: $universityId) {
+    edges {
+      node {
+        id
+        title
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSubjectsQuery__
+ *
+ * To run a query within a React component, call `useSubjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSubjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubjectsQuery({
+ *   variables: {
+ *      universityId: // value for 'universityId'
+ *   },
+ * });
+ */
+export function useSubjectsQuery(baseOptions?: Apollo.QueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, options);
+      }
+export function useSubjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SubjectsQuery, SubjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SubjectsQuery, SubjectsQueryVariables>(SubjectsDocument, options);
+        }
+export type SubjectsQueryHookResult = ReturnType<typeof useSubjectsQuery>;
+export type SubjectsLazyQueryHookResult = ReturnType<typeof useSubjectsLazyQuery>;
+export type SubjectsQueryResult = Apollo.QueryResult<SubjectsQuery, SubjectsQueryVariables>;
 export const UniversitiesDocument = gql`
     query Universities($first: Int, $after: String) {
   universities(first: $first, after: $after) {

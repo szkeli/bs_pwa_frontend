@@ -11,9 +11,10 @@ import {
   TextField,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   useCreatePostMutation,
+  useSubjectsLazyQuery,
   useUniversitiesQuery,
 } from "./generated/graphql";
 
@@ -23,12 +24,31 @@ export default function CreatePost() {
     error: UniversitiesError,
     loading: UniversitiesLoading,
   } = useUniversitiesQuery();
+  const [
+    fetchSubjects,
+    { data: SubjectsData, error: SubjectsError, loading: SubjectsLoading },
+  ] = useSubjectsLazyQuery();
   const [createPost, { data, error, loading }] = useCreatePostMutation();
   const [universityId, setUniversityId] = useState("");
+  const [subjectId, setSubjectId] = useState<string>();
   const [content, setContent] = useState("");
   const [anonymous, setAnonymous] = useState(false);
+
+    useEffect(() => {
+        if(!UniversitiesLoading) {
+            fetchSubjects({
+                variables: {
+                    universityId
+                }
+            })
+        }
+    }, [universityId, UniversitiesLoading, fetchSubjects])
+
   const handleChangeUniversity = (event: SelectChangeEvent) => {
     setUniversityId(event.target.value);
+  };
+  const handleChangeSubject = (event: SelectChangeEvent) => {
+    setSubjectId(event.target.value);
   };
   const handleContent = (event: ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value);
@@ -38,14 +58,16 @@ export default function CreatePost() {
   };
   const handleSubmit = () => {
     createPost({
-        variables: {
-            universityId,
-            content,
-            isAnonymous: anonymous
-        }
-    })
+      variables: {
+        universityId,
+        content,
+        isAnonymous: anonymous,
+        subjectId,
+      },
+    });
   };
   const universities = UniversitiesData?.universities.edges.map((i) => i.node);
+  const subjects = SubjectsData?.subjectsWithRelay.edges.map((i) => i.node);
 
   return (
     <Box>
@@ -63,6 +85,24 @@ export default function CreatePost() {
             ))}
           </Select>
         </FormControl>
+        {(subjects?.length ?? 0) !== 0 ? (
+          <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="subject-selector">选择主题</InputLabel>
+            <Select
+              labelId="subject-selector"
+              id="sselector"
+              value={subjectId}
+              onChange={handleChangeSubject}
+            >
+              {subjects?.map((i) => (
+                <MenuItem value={i?.id}>{i?.title}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        ) : (
+          <></>
+        )}
+
         <TextField
           label="content"
           multiline
