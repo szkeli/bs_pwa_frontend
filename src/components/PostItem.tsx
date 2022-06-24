@@ -136,6 +136,7 @@ function MAvatar(props: PostItemProps) {
 }
 
 export default function PostItem(props: PostItemProps) {
+  const navigate = useNavigate();
   const [addUpvote] = useAddUpvoteOnPostMutation();
   const post = props.post;
   const viewerHasUpvoted = post?.votesWithRelay?.viewerHasUpvoted ?? false;
@@ -200,21 +201,32 @@ export default function PostItem(props: PostItemProps) {
           <></>
         )}
         <CardContent>
-          <Chip
-            avatar={
-              <Avatar alt={university?.name ?? ""} src={university?.logoUrl} />
-            }
-            label={university?.name ?? "N/A"}
-          />
+          {university ? (
+            <Chip
+              avatar={
+                <Avatar
+                  alt={university?.name ?? ""}
+                  src={university?.logoUrl}
+                />
+              }
+              onClick={() => {
+                navigate(`university/${university?.id}`);
+              }}
+              label={university?.name ?? "N/A"}
+            />
+          ) : (
+            <></>
+          )}
           {subject ? (
             <Chip
+              label={subject?.title ?? "N/A"}
+              color="primary"
               avatar={
                 <Avatar
                   alt={subject?.title ?? ""}
                   src={subject?.avatarImageUrl}
                 />
               }
-              label={subject?.title ?? "N/A"}
             />
           ) : (
             <></>
