@@ -1,4 +1,4 @@
-import { Paper, SpeedDial } from "@mui/material";
+import { AppBar, Paper, SpeedDial, Toolbar } from "@mui/material";
 import { PostsQuery, usePostsQuery } from "./generated/graphql";
 import {
     Add as AddIcon,
@@ -6,6 +6,7 @@ import {
 import { Virtuoso } from "react-virtuoso";
 import PostItem from "./components/PostItem";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "./components/SearchBar";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -22,6 +23,12 @@ export default function Home() {
     }
 
     return (
+        <>
+        <AppBar position="static">
+            <Toolbar>
+                <SearchBar />
+            </Toolbar>
+        </AppBar>
         <Paper sx={{backgroundColor: '#eee', flexGrow: 1, height: '100%' }}>
             <SpeedDial
                 onClick={ () => {
@@ -45,5 +52,6 @@ export default function Home() {
             >
             </Virtuoso>
         </Paper>
+        </>
     )
 }

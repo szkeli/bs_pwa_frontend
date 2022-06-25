@@ -1,5 +1,5 @@
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Button, Stack, TextField } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -13,10 +13,9 @@ export default function EditUniversity() {
   const [logoUrl, setLogoUrl] = useState("");
   const {
     data: UniversityData,
-    error: UniversityError,
     loading: UniversityLoading,
   } = useUniversityQuery({ variables: { id: id ?? "" } });
-  const [updateUniversity, { data, error, loading }] =
+  const [updateUniversity, { error, loading }] =
     useUpdateUniversityMutation();
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
