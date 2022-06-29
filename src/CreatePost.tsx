@@ -19,29 +19,23 @@ import {
 } from "./generated/graphql";
 
 export default function CreatePost() {
-  const {
-    data: UniversitiesData,
-    loading: UniversitiesLoading,
-  } = useUniversitiesQuery();
-  const [
-    fetchSubjects,
-    { data: SubjectsData, },
-  ] = useSubjectsLazyQuery();
+  const { data: UniversitiesData, loading: UniversitiesLoading } =
+    useUniversitiesQuery();
+  const [fetchSubjects, { data: SubjectsData }] = useSubjectsLazyQuery();
   const [createPost] = useCreatePostMutation();
   const [universityId, setUniversityId] = useState("");
   const [subjectId, setSubjectId] = useState<string>();
   const [content, setContent] = useState("");
   const [anonymous, setAnonymous] = useState(false);
-
-    useEffect(() => {
-        if(!UniversitiesLoading) {
-            fetchSubjects({
-                variables: {
-                    universityId
-                }
-            })
-        }
-    }, [universityId, UniversitiesLoading, fetchSubjects])
+  useEffect(() => {
+    if (!UniversitiesLoading) {
+      fetchSubjects({
+        variables: {
+          universityId,
+        },
+      });
+    }
+  }, [universityId, UniversitiesLoading, fetchSubjects]);
 
   const handleChangeUniversity = (event: SelectChangeEvent) => {
     setUniversityId(event.target.value);
