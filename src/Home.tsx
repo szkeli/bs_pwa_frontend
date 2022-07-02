@@ -78,7 +78,7 @@ function UniversitySelector() {
       </Dialog>
       <IconButton onClick={handleOpen}>
         <Avatar
-          sx={{ bgcolor: 'white' }}
+          sx={{ bgcolor: "white" }}
           alt={universityState ? universityState.name : "N/A"}
           src={universityState ? universityState.logoUrl : "N/A"}
         />
