@@ -47,6 +47,7 @@ export default function SearchBar() {
                 <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+                disabled
                 placeholder="Search..."
                 inputProps={{ 'aria-label': 'search' }} />
         </Search>

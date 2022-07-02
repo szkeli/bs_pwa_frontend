@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import SearchBar from "./components/SearchBar";
 import { useUniversitySelector } from "./hooks";
 import { useState } from "react";
+import { Container } from "@mui/system";
 
 function UniversitySelector() {
   const { universityState, setUniversityState } = useUniversitySelector();
@@ -105,7 +106,11 @@ export default function Home() {
       <AppBar position="static">
         <Toolbar>
           <UniversitySelector />
-          <SearchBar />
+          <Container onClick={() => {
+            navigate('/search')
+          }}>
+            <SearchBar />
+          </Container>
         </Toolbar>
       </AppBar>
       <Paper sx={{ backgroundColor: "#eee", flexGrow: 1, height: "100%" }}>
